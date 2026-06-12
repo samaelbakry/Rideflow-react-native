@@ -1,21 +1,21 @@
-import { getSearchvalue } from "@/services/searchAutocomplete-service";
-import { setDestination, setOrigin } from "@/store/slices/rideFlowSlice";
-import { useAppDispatch } from "@/store/store";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
 import {
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TextInput,
   ActivityIndicator,
   FlatList,
-  Keyboard,
-  Text,
-  TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
 } from "react-native";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch } from "@/store/store";
 import tw from "twrnc";
+import { getSearchvalue } from "@/services/searchAutocomplete-service";
+import { setDestination } from "@/store/slices/rideFlowSlice";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function SearchBar() {
+export default function NavigateCard() {
   const [rideDestination, setRideDestination] = useState("");
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -49,24 +49,22 @@ export default function SearchBar() {
     setRideDestination("");
     setResults([]);
   };
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={tw`gap-3`}>
+      <View style={tw`gap-3 m-4`}>
         <View style={tw`relative`}>
           <TextInput
             value={rideDestination}
             onChangeText={setRideDestination}
-            placeholder="where from?..."
+            placeholder="where to?..."
             placeholderTextColor="#6B7280"
             style={tw`
              bg-gray-100
              p-3
-            pr-10
+             pr-10
              rounded-xl
-      text-gray-800
-      shadow-md
-    `}
+            text-gray-800
+            shadow-md `}
           />
 
           {loading && (
@@ -94,8 +92,8 @@ export default function SearchBar() {
             <TouchableOpacity
               onPress={() => {
                 dispatch(
-                  setOrigin({
-                    location: item.display_name,
+                  setDestination({
+                    description: item.display_name,
                     latitude: parseFloat(item.lat),
                     longitude: parseFloat(item.lon),
                   }),

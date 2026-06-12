@@ -4,8 +4,12 @@ import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
 import car from "@/assets/images/car1.jpg";
+import { useAppSelector } from "@/store/store";
+import { selectOrigin } from "@/store/slices/rideFlowSlice";
 
 export default function Navoptions() {
+  const origin = useAppSelector(selectOrigin);
+
   return (
     <TouchableOpacity
       activeOpacity={0.85}
@@ -28,11 +32,10 @@ export default function Navoptions() {
       <View style={tw`mt-3 items-center`}>
         <Link href="/maps" asChild>
           <TouchableOpacity
-            style={tw`bg-black px-4 py-2 rounded-full flex-row items-center gap-1`}
+            disabled={origin ? false : true}
+            style={tw`bg-black px-4 py-2 rounded-full flex-row items-center gap-1 ${origin ? "opacity-100" : "opacity-80"}`}
           >
-            <Text style={tw`text-white text-xs font-semibold`}>
-              Start
-            </Text>
+            <Text style={tw`text-white text-xs font-semibold`}>Start</Text>
             <Ionicons name="arrow-forward" size={16} color="white" />
           </TouchableOpacity>
         </Link>

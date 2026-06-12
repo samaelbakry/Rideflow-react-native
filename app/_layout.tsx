@@ -16,7 +16,7 @@ export default function RootLayout() {
         <Stack.Screen name="maps" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
-      <StatusBar style="dark" />
+      <StatusBar style="auto" />
     </ThemeProvider>
    </ReduxProvider>
   );
