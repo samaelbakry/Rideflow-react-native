@@ -8,5 +8,5 @@ export type ContainerProps = {
 export type LatLng = {
   latitude: number;
   longitude: number;
-   description?: string;
+  description?: string;
 };

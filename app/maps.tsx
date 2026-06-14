@@ -11,7 +11,7 @@ export default function Maps() {
         <MapContent />
       </View>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={tw`h-1/2 bg-gray-100`}>
+        <View style={tw`h-1/2 bg-gray-100 rounded-2xl py-2 `}>
           <NavigateCard />
         </View>
       </TouchableWithoutFeedback>
