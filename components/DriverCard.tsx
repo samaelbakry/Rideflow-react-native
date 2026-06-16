@@ -2,7 +2,7 @@ import { cars } from "@/constants/ride";
 import {
   selectedCar,
   selectTravelTimeInformation,
-  setSelectedCar
+  setSelectedCar,
 } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import React from "react";
@@ -15,7 +15,10 @@ export default function DriverCard() {
   const distanceKm = (travelData?.distance ?? 0) / 1000;
   const travelDuration = (travelData?.duration ?? 0) / 60;
 
-  const formatDuration = travelDuration >= 60  ? `${(travelDuration / 60).toFixed(1)} hr`: `${Math.ceil(travelDuration)} min`;
+  const formatDuration =
+    travelDuration >= 60
+      ? `${(travelDuration / 60).toFixed(1)} hr`
+      : `${Math.ceil(travelDuration)} min`;
 
   const baseFare = distanceKm * 8;
   const dispatch = useAppDispatch();
@@ -23,7 +26,6 @@ export default function DriverCard() {
 
   return (
     <>
-  
       <FlatList
         showsHorizontalScrollIndicator={false}
         data={cars}

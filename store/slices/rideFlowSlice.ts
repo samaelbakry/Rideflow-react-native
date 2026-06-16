@@ -15,6 +15,7 @@ type RideFlowState = {
   travelTimeInformation: any;
   selectedCar: string | null;
   selectedDriver: any | null;
+  driverArrived: boolean;
   rideStatus: RideStatus;
 };
 
@@ -24,6 +25,7 @@ const initialState: RideFlowState = {
   travelTimeInformation: null,
   selectedCar: null,
   selectedDriver: null,
+  driverArrived: false,
   rideStatus: "idle",
 };
 
@@ -47,27 +49,52 @@ const RideFlowSlice = createSlice({
     },
     setSelectedDriver: (state, action) => {
       state.selectedDriver = action.payload;
+      state.driverArrived = false;
       state.rideStatus = "driver_assigned";
     },
     startTrip: (state) => {
       state.rideStatus = "trip_started";
     },
+    setDriverPosition: (state, action) => {
+      state.driverArrived = action.payload;
+    },
     endTrip: (state) => {
       state.rideStatus = "trip_ended";
     },
+   startOver: (state) => {
+  state.rideStatus = "idle";
+  state.driverArrived = false;
+  state.selectedDriver = null;
+  state.selectedCar = null;
+
+  state.origin = null;
+  state.destination = null;
+  state.travelTimeInformation = null;
+}
   },
 });
 
 export const rideFlowReducer = RideFlowSlice.reducer;
 
-export const { setOrigin, setDestination, setTravelInfo , setSelectedCar , setSelectedDriver  , startTrip , endTrip} =
-  RideFlowSlice.actions;
+export const {
+  setOrigin,
+  setDestination,
+  setTravelInfo,
+  setSelectedCar,
+  setSelectedDriver,
+  setDriverPosition,
+  startTrip,
+  endTrip,
+  startOver
+} = RideFlowSlice.actions;
 
 export const selectOrigin = (state: RootState) => state.rideFlow.origin;
 export const selectDestination = (state: RootState) =>
   state.rideFlow.destination;
 export const selectTravelTimeInformation = (state: RootState) =>
   state.rideFlow.travelTimeInformation;
-export const selectedCar = (state:RootState) =>state.rideFlow.selectedCar
-export const selectedDriver = (state:RootState) =>state.rideFlow.selectedDriver
-export const rideState = (state:RootState) =>state.rideFlow.rideStatus
+export const selectedCar = (state: RootState) => state.rideFlow.selectedCar;
+export const selectedDriver = (state: RootState) =>
+  state.rideFlow.selectedDriver;
+export const rideState = (state: RootState) => state.rideFlow.rideStatus;
+export const driverArrived = (state: RootState) => state.rideFlow.driverArrived;

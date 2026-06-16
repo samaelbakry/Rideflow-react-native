@@ -1,4 +1,4 @@
-import { selectedDriver, startTrip } from '@/store/slices/rideFlowSlice'
+import { driverArrived, selectedDriver, startTrip } from '@/store/slices/rideFlowSlice'
 import { useAppDispatch, useAppSelector } from '@/store/store'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
@@ -8,6 +8,7 @@ import tw from "twrnc"
 export default function DriverAssginedCar() {
   const dispatch = useAppDispatch()
   const driver = useAppSelector(selectedDriver)
+  const driverIsHere = useAppSelector(driverArrived)
 
   if (!driver) return null
 
@@ -17,9 +18,9 @@ export default function DriverAssginedCar() {
         <Text style={tw`text-xl font-bold text-gray-900`}>
           Driver Found 🎉
         </Text>
-        <View style={tw`bg-green-100 px-3 py-1 rounded-full`}>
-          <Text style={tw`text-green-700 text-xs font-semibold`}>
-            On the way
+        <View style={tw`${driverIsHere ?  "bg-green-100" : "bg-blue-100"} px-3 py-1 rounded-full`}>
+          <Text style={tw`${driverIsHere ?  "text-green-700" : "text-blue-700"} text-xs font-semibold`}>
+            {driverIsHere ?  "Driver Arrived !" : "On the way.."}
           </Text>
         </View>
       </View>
@@ -67,7 +68,8 @@ export default function DriverAssginedCar() {
           </Text>
         </View>
       </View>
-      <TouchableOpacity
+      
+      { driverIsHere &&  <TouchableOpacity
         onPress={() => dispatch(startTrip())}
         style={tw`bg-blue-500 p-4 rounded-xl active:bg-blue-600`}
         activeOpacity={0.85}
@@ -75,7 +77,7 @@ export default function DriverAssginedCar() {
         <Text style={tw`text-center text-white font-bold text-base`}>
           Start Trip
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> }
     </View>
   );
 }
