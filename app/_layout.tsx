@@ -1,4 +1,8 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
@@ -7,15 +11,14 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import ReduxProvider from "@/providers/ReduxProvider";
 import { useEffect, useState } from "react";
 import AnimatedSplash from "@/components/AnimatedSplash";
+import AuthProvider from "@/providers/AuthProvider";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [ready, setReady] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
-
-  useEffect(() => {
-    SplashScreen.preventAutoHideAsync();
-  }, []);
 
   useEffect(() => {
     async function load() {
@@ -39,10 +42,15 @@ export default function RootLayout() {
 
   return (
     <ReduxProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }} />
-        <StatusBar style="auto" />
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack screenOptions={{ headerShown: false }} />
+
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </AuthProvider>
     </ReduxProvider>
   );
 }

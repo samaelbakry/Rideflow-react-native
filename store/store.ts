@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from "react-redux";
 import {rideFlowReducer} from "./slices/rideFlowSlice"
+import authReducer from "./slices/authSlice"
 
 export const store = configureStore({
   reducer: {
-    rideFlow:rideFlowReducer
+    rideFlow:rideFlowReducer,
+    auth:authReducer
   },
 })
 
