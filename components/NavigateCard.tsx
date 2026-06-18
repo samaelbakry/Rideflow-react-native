@@ -141,6 +141,7 @@ export default function NavigateCard() {
       {(rideStatus === "trip_started" || rideStatus === "trip_ended") && (
         <TripStarted />
       )}
+      
     </>
   );
 }

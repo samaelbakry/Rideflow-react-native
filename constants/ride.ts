@@ -2,23 +2,22 @@ export const cars = [
   {
     id: "1",
     title: "Economy",
-    multiplier: 1,
+    multiplier: 2,
     image: require("@/assets/images/car1.jpg"),
   },
   {
     id: "2",
     title: "Comfort",
-    multiplier: 1.5,
+    multiplier: 4,
     image: require("@/assets/images/car2.png"),
   },
   {
     id: "3",
     title: "Premium",
-    multiplier: 2.2,
+    multiplier: 8,
     image: require("@/assets/images/car3.jpg"),
   },
 ];
-
 export const drivers = [
   {
     id: "101",
@@ -29,7 +28,7 @@ export const drivers = [
     lat: 31.2156,
     lng: 29.9553,
     isAvailable: true,
-    rideType: "UberX",
+    rideType: "Economy",
   },
   {
     id: "102",
@@ -40,7 +39,7 @@ export const drivers = [
     lat: 31.205,
     lng: 29.92,
     isAvailable: true,
-    rideType: "UberX",
+    rideType: "Economy",
   },
   {
     id: "103",
@@ -62,7 +61,7 @@ export const drivers = [
     lat: 31.211,
     lng: 29.961,
     isAvailable: true,
-    rideType: "UberX",
+    rideType: "Economy",
   },
   {
     id: "105",
@@ -95,7 +94,7 @@ export const drivers = [
     lat: 31.219,
     lng: 29.95,
     isAvailable: true,
-    rideType: "Black",
+    rideType: "Premium",
   },
   {
     id: "108",

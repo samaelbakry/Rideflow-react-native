@@ -61,16 +61,16 @@ const RideFlowSlice = createSlice({
     endTrip: (state) => {
       state.rideStatus = "trip_ended";
     },
-   startOver: (state) => {
-  state.rideStatus = "idle";
-  state.driverArrived = false;
-  state.selectedDriver = null;
-  state.selectedCar = null;
+    startOver: (state) => {
+      state.rideStatus = "idle";
+      state.driverArrived = false;
+      state.selectedDriver = null;
+      state.selectedCar = null;
 
-  state.origin = null;
-  state.destination = null;
-  state.travelTimeInformation = null;
-}
+      state.origin = null;
+      state.destination = null;
+      state.travelTimeInformation = null;
+    },
   },
 });
 
@@ -85,7 +85,7 @@ export const {
   setDriverPosition,
   startTrip,
   endTrip,
-  startOver
+  startOver,
 } = RideFlowSlice.actions;
 
 export const selectOrigin = (state: RootState) => state.rideFlow.origin;

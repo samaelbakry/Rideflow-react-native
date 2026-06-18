@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import tw from "twrnc"
+import CancelRideButton from './CancelRideButton'
 
 export default function DriverAssginedCar() {
   const dispatch = useAppDispatch()
@@ -78,6 +79,9 @@ export default function DriverAssginedCar() {
           Start Trip
         </Text>
       </TouchableOpacity> }
+
+      {!driverIsHere && <CancelRideButton/>}
+      
     </View>
   );
 }

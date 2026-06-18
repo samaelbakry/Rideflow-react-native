@@ -33,7 +33,7 @@ export default function Navoptions() {
         <Link href="/maps" asChild>
           <TouchableOpacity
             disabled={origin ? false : true}
-            style={tw`bg-black px-4 py-2 rounded-full flex-row items-center gap-1 ${origin ? "opacity-100" : "opacity-80"}`}
+            style={tw`px-4 py-2 rounded-full flex-row items-center gap-1 ${origin ? "bg-green-500" : "bg-black"}`}
           >
             <Text style={tw`text-white text-xs font-semibold`}>Start</Text>
             <Ionicons name="arrow-forward" size={16} color="white" />

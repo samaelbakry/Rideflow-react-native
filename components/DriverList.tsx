@@ -1,23 +1,32 @@
-import { View, Text, FlatList, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { drivers } from '@/constants/ride';
-import tw from "twrnc"
-import { useAppDispatch } from '@/store/store';
-import { setSelectedDriver } from '@/store/slices/rideFlowSlice';
+import { cars, drivers } from "@/constants/ride";
+import { selectedCar, setSelectedDriver } from "@/store/slices/rideFlowSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import React from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import tw from "twrnc";
 
 export default function DriverList() {
-  const dispatch = useAppDispatch()
-  return (
+  const dispatch = useAppDispatch();
+  const selectedCarType = useAppSelector(selectedCar);
+  const driversData = drivers.filter((driver) =>
+  cars.find((car) => car.id === selectedCarType)?.title === driver.rideType
+);
+
+  return (  
     <FlatList
-      data={drivers}
+      data={driversData}
       keyExtractor={(item) => item.id}
       contentContainerStyle={tw`p-4`}
       renderItem={({ item }) => (
-        <TouchableOpacity 
-        onPress={()=>{
-          dispatch(setSelectedDriver(item))
+        <TouchableOpacity
+        onPress={() => {
+          if (!item.isAvailable) return;
+          dispatch(setSelectedDriver(item));
         }}
-          style={tw`bg-white rounded-3xl p-4 mb-4 shadow-sm`}
+        style={[
+          tw`bg-white rounded-3xl p-4 mb-4 shadow-sm`,
+          !item.isAvailable && tw`opacity-50`,
+        ]}
         >
           <View style={tw`flex-row justify-between items-start`}>
             <View>
@@ -31,7 +40,7 @@ export default function DriverList() {
 
             <View
               style={tw`flex-row items-center bg-yellow-50 px-2 py-1 rounded-full`}
-            >
+              >
               <Text style={tw`text-yellow-500 text-sm`}>⭐</Text>
               <Text style={tw`text-yellow-700 font-semibold text-sm ml-1`}>
                 {item.rating}
@@ -45,7 +54,7 @@ export default function DriverList() {
             <View style={tw`flex-row items-center flex-1`}>
               <View
                 style={tw`w-10 h-10 rounded-full bg-blue-50 items-center justify-center mr-3`}
-              >
+                >
                 <Text style={tw`text-lg`}>🚘</Text>
               </View>
               <View>
@@ -67,13 +76,13 @@ export default function DriverList() {
                 style={tw`text-xs font-bold ${
                   item.isAvailable ? "text-green-700" : "text-red-600"
                 }`}
-              >
+                >
                 {item.isAvailable ? "● Available" : "● Unavailable"}
               </Text>
             </View>
           </View>
         </TouchableOpacity>
       )}
-    />
-  )
+      />
+  );
 }
