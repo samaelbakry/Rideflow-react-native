@@ -64,7 +64,7 @@ export default function Register() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={tw`flex-1 bg-white`} edges={["top"]}>
+      <SafeAreaView style={tw`flex-1 bg-white/90`} edges={["top"]}>
         <ScrollView  contentContainerStyle={tw`flex-1 px-6 justify-center`}>
           <View style={tw`items-center mb-12`}>
             <Logo />

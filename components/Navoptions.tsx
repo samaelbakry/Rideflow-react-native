@@ -3,7 +3,7 @@ import { Link } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import car from "@/assets/images/car1.jpg";
+import car from "@/assets/images/car1.png";
 import { useAppSelector } from "@/store/store";
 import { selectOrigin } from "@/store/slices/rideFlowSlice";
 
@@ -13,7 +13,7 @@ export default function Navoptions() {
   return (
     <TouchableOpacity
       activeOpacity={0.85}
-      style={tw`bg-white rounded-2xl p-3 shadow border border-gray-100 w-44`}
+      style={tw`bg-white/60 rounded-2xl p-3 shadow border border-gray-100 w-44`}
     >
       <Image
         source={car}

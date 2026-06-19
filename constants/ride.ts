@@ -3,7 +3,7 @@ export const cars = [
     id: "1",
     title: "Economy",
     multiplier: 2,
-    image: require("@/assets/images/car1.jpg"),
+    image: require("@/assets/images/car1.png"),
   },
   {
     id: "2",
@@ -15,7 +15,7 @@ export const cars = [
     id: "3",
     title: "Premium",
     multiplier: 8,
-    image: require("@/assets/images/car3.jpg"),
+    image: require("@/assets/images/car3.png"),
   },
 ];
 export const drivers = [

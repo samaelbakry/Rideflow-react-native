@@ -24,7 +24,7 @@ export default function Suggestions() {
         renderItem={({ item }) => (
           <TouchableOpacity
             activeOpacity={0.8}
-            style={tw`bg-white rounded-2xl p-4 shadow-md border border-gray-100 w-40 ${origin ? "opacity-100" : "opacity-80"}`}
+            style={tw`bg-white/60 rounded-2xl p-4 shadow-md border border-gray-100 w-40 ${origin ? "opacity-100" : "opacity-80"}`}
           >
             <Image
               source={item.image}

@@ -89,7 +89,7 @@ export default function SearchBar() {
           data={results}
           keyExtractor={(item, index) => index.toString()}
           keyboardShouldPersistTaps="handled"
-          style={tw`bg-white rounded-xl`}
+          style={tw`bg-white rounded-xl mb-2`}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => {

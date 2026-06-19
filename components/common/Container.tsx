@@ -1,12 +1,12 @@
-import { View, Platform, SafeAreaView } from 'react-native'
+import { View, Platform } from 'react-native'
 import React from 'react'
 import { ContainerProps } from '@/types/PropsTypes'
 import tw from "twrnc"
 
 export default function Container({children , className} :ContainerProps) {
   return (
-    <SafeAreaView style={tw`bg-white flex-1`}>
-      <View style={[tw`p-5` , className ? tw`${className}` : null , tw`${Platform.OS ==="android" ? "mt-10" : "mt-0"}`]}>{children}</View>
-    </SafeAreaView>
+    <View style={tw`bg-white/90 flex-1 py-20 px-5`}>
+      <View style={[tw`py -1` , className ? tw`${className}` : null , tw`${Platform.OS ==="android" ? "mt-10" : "mt-0"}`]}>{children}</View>
+    </View>
   )
 }
