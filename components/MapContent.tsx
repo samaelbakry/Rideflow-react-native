@@ -93,7 +93,7 @@ export default function MapContent() {
           animated: true,
         });
       }
-    }, 300);
+    }, 800);
 
     return () => clearTimeout(timer);
   }, [origin, destination, carPosition]);

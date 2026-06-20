@@ -25,60 +25,60 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-  name="index"
-  options={{
-    title: "Home",
-    tabBarIcon: ({ color, focused }) => (
-      <Ionicons
-        name={focused ? "home" : "home-outline"}
-        size={24}
-        color={color}
+        name="index"
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
       />
-    ),
-  }}
-/>
 
-<Tabs.Screen
-  name="activity"
-  options={{
-    title: "Activity",
-    tabBarIcon: ({ color, focused }) => (
-      <Ionicons
-        name={focused ? "time" : "time-outline"}
-        size={24}
-        color={color}
+      <Tabs.Screen
+        name="activity"
+        options={{
+          title: "Activity",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "time" : "time-outline"}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
       />
-    ),
-  }}
-/>
 
-<Tabs.Screen
-  name="services"
-  options={{
-    title: "Services",
-    tabBarIcon: ({ color, focused }) => (
-      <Ionicons
-        name={focused ? "grid" : "grid-outline"}
-        size={24}
-        color={color}
+      <Tabs.Screen
+        name="services"
+        options={{
+          title: "Services",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "grid" : "grid-outline"}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
       />
-    ),
-  }}
-/>
 
-<Tabs.Screen
-  name="account"
-  options={{
-    title: "Account",
-    tabBarIcon: ({ color, focused }) => (
-      <Ionicons
-        name={focused ? "person" : "person-outline"}
-        size={24}
-        color={color}
+      <Tabs.Screen
+        name="account"
+        options={{
+          title: "Account",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "person" : "person-outline"}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
       />
-    ),
-  }}
-/>
     </Tabs>
   );
 }

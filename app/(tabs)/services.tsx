@@ -20,7 +20,7 @@ export default function Services() {
         renderItem={({ item }) => (
           <TouchableOpacity
             activeOpacity={0.8}
-            style={tw`bg-white rounded-2xl p-4 shadow border border-gray-100 w-[48%]`}
+            style={tw`bg-white/60 rounded-2xl p-4 shadow border border-gray-100 w-[48%]`}
           >
             <Image
               source={item.image}

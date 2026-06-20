@@ -6,7 +6,7 @@ import {
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
-
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import ReduxProvider from "@/providers/ReduxProvider";
 import { useEffect, useState } from "react";
@@ -43,13 +43,15 @@ export default function RootLayout() {
   return (
     <ReduxProvider>
       <AuthProvider>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack screenOptions={{ headerShown: false }} />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack screenOptions={{ headerShown: false }} />
 
-          <StatusBar style="auto" />
-        </ThemeProvider>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </GestureHandlerRootView>
       </AuthProvider>
     </ReduxProvider>
   );

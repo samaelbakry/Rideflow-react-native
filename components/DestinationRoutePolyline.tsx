@@ -19,13 +19,7 @@ export default function DestinationRoutePolyline({routeCoords}:{routeCoords:any}
               lineJoin="round"
             />
 
-            <Polyline
-              coordinates={routeCoords}
-              strokeWidth={2}
-              strokeColor="#ffffff"
-              lineDashPattern={[1, 9]}
-              lineCap="round"
-            />
+            
     </>
   )
 }

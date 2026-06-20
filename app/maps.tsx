@@ -1,20 +1,30 @@
 import MapContent from "@/components/MapContent";
 import NavigateCard from "@/components/NavigateCard";
-import React from "react";
-import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
+import React, { useMemo, useRef } from "react";
+import { Keyboard, View } from "react-native";
 import tw from "twrnc";
 
+import BottomSheet, {
+  BottomSheetView,
+  TouchableWithoutFeedback,
+} from "@gorhom/bottom-sheet";
+
 export default function Maps() {
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const snapPoints = useMemo(() => ["25%", "50%", "90%"], []);
+
   return (
-    <View>
-      <View style={tw`h-1/2`}>
-        <MapContent />
-      </View>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={tw`h-1/2 bg-gray-100 rounded-2xl py-2 `}>
-          <NavigateCard />
-        </View>
-      </TouchableWithoutFeedback>
+    <View style={tw`flex-1`}>
+      <MapContent />
+
+      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
+        <BottomSheetView style={tw`flex-1`}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <NavigateCard />
+          </TouchableWithoutFeedback>
+        </BottomSheetView>
+      </BottomSheet>
     </View>
   );
 }
