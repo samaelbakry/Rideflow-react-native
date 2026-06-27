@@ -1,9 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
+  Alert,
   Keyboard,
   ScrollView,
   Text,
@@ -14,21 +16,19 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "twrnc";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Link, useRouter } from "expo-router";
 
 import Logo from "@/components/Logo";
 import { registerSchema, RegisterSchemaType } from "@/schemas/auth-schemas";
+import { register } from "@/services/auth";
 import { setUser } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/store";
 
 export default function Register() {
-  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const dispatch = useAppDispatch();
-  const router = useRouter()
+  const router = useRouter();
 
   const {
     control,
@@ -44,28 +44,22 @@ export default function Register() {
     },
   });
 
-  const onSubmit = async (data: RegisterSchemaType) => {
-    try {
-      const user = {
-        name: data.fullName,
-        email: data.email,
-        password: data.password,
-      };
+  const onSubmit = async (values: RegisterSchemaType) => {
+  try {
+    const user = await register(values);
 
-      dispatch(setUser(user));
+    dispatch(setUser(user));
 
-      await AsyncStorage.setItem("user", JSON.stringify(user));
-      router.replace("/")
-
-    } catch (error) {
-      console.log("Register error:", error);
-    }
-  };
+    router.replace("/");
+  } catch (error: any) {
+    Alert.alert(error.message);
+  }
+};
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={tw`flex-1 bg-white/90`} edges={["top"]}>
-        <ScrollView  contentContainerStyle={tw`flex-1 px-6 justify-center`}>
+        <ScrollView contentContainerStyle={tw`flex-1 px-6 justify-center`}>
           <View style={tw`items-center mb-12`}>
             <Logo />
             <Text style={tw`text-gray-500 text-base mt-2`}>Move smarter.</Text>
@@ -110,7 +104,6 @@ export default function Register() {
 
           <View style={tw`h-4`} />
 
-          
           <Controller
             control={control}
             name="email"
@@ -142,7 +135,6 @@ export default function Register() {
 
           <View style={tw`h-4`} />
 
-          
           <Controller
             control={control}
             name="password"

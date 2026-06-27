@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
+  Alert,
   Keyboard,
   Text,
   TextInput,
@@ -16,15 +17,15 @@ import tw from "twrnc";
 
 import Logo from "@/components/Logo";
 import { loginSchema, LoginSchemaType } from "@/schemas/auth-schemas";
+import { login } from "@/services/auth";
 import { setUser } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/store";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, useRouter } from "expo-router";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useAppDispatch();
-  const router = useRouter()
+  const router = useRouter();
 
   const {
     control,
@@ -38,13 +39,15 @@ export default function Login() {
     },
   });
 
-  const onSubmit = async (data: LoginSchemaType) => {
+  const onSubmit = async (values: LoginSchemaType) => {
     try {
-      dispatch(setUser(data));
-      await AsyncStorage.setItem("user", JSON.stringify(data));
-      router.replace("/")
-    } catch (error) {
-      console.log("Failed to register user", error);
+      const user = await login(values);
+
+      dispatch(setUser(user));
+
+      router.replace("/");
+    } catch (error: any) {
+      Alert.alert(error.message);
     }
   };
 
@@ -68,7 +71,7 @@ export default function Login() {
             </Text>
           </View>
 
-         <Controller
+          <Controller
             control={control}
             name="email"
             render={({ field: { onChange, value } }) => (
@@ -96,7 +99,6 @@ export default function Login() {
               </>
             )}
           />
-
 
           <View style={tw`h-4`} />
 
@@ -150,11 +152,7 @@ export default function Login() {
             )}
           >
             <Text style={tw`text-white text-lg font-bold`}>
-              {isSubmitting ? (
-                <ActivityIndicator color={"white"} />
-              ) : (
-                "Login"
-              )}
+              {isSubmitting ? <ActivityIndicator color={"white"} /> : "Login"}
             </Text>
           </TouchableOpacity>
 

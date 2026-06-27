@@ -1,6 +1,6 @@
+import { getCurrentUser } from "@/services/auth";
 import { initializAuth, setUser } from "@/store/slices/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
 
@@ -15,21 +15,17 @@ export default function AuthProvider({
 
   useEffect(() => {
     const initialize = async () => {
-      try {
-        const user = await AsyncStorage.getItem("user");
+      const user = await getCurrentUser();
 
-        if (user) {
-          dispatch(setUser(JSON.parse(user)));
-        } else {
-          dispatch(initializAuth());
-        }
-      } catch {
+      if (user) {
+        dispatch(setUser(user));
+      } else {
         dispatch(initializAuth());
       }
     };
 
     initialize();
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (!initialized) return;

@@ -1,19 +1,25 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import tw from "twrnc";
 
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { logout } from "@/store/slices/authSlice";
+import { signOut } from "@/services/auth";
 
 export default function Account() {
   const dispatch = useAppDispatch();
 
   const user = useAppSelector((state) => state.auth.user);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+  try {
+    await signOut();
     dispatch(logout());
-  };
+  } catch (error: any) {
+    Alert.alert(error.message);
+  }
+};
 
   const initial = user?.name?.charAt(0)?.toUpperCase() ?? "U";
 
