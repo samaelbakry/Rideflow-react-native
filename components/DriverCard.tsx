@@ -1,28 +1,36 @@
-import { cars } from "@/constants/ride";
+import { getCars } from "@/services/rideData";
 import {
   selectedCar,
   selectTravelTimeInformation,
   setSelectedCar,
 } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import React from "react";
+import { Car } from "@/types/rideTypes";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
 
 export default function DriverCard() {
   const travelData = useAppSelector(selectTravelTimeInformation);
+  const [cars, setCars] = useState<Car[]>([]);
 
   const distanceKm = (travelData?.distance ?? 0) / 1000;
   const travelDuration = (travelData?.duration ?? 0) / 60;
 
-  const formatDuration =
-    travelDuration >= 60
-      ? `${(travelDuration / 60).toFixed(1)} hr`
-      : `${Math.ceil(travelDuration)} min`;
+  const formatDuration = travelDuration >= 60? `${(travelDuration / 60).toFixed(1)} hr` : `${Math.ceil(travelDuration)} min`;
 
   const baseFare = distanceKm * 8;
   const dispatch = useAppDispatch();
   const selectCar = useAppSelector(selectedCar);
+
+  useEffect(() => {
+    async function loadCars() {
+      const data = await getCars();
+      setCars(data);
+    }
+
+    loadCars();
+  }, []);
 
   return (
     <>
@@ -42,15 +50,13 @@ export default function DriverCard() {
                 dispatch(setSelectedCar(item.id));
               }}
               style={[
-                tw`
-    flex-row items-center bg-white p-4 rounded-2xl shadow border-gray-100 border mb-3
-  `,
+                tw`flex-row items-center bg-white p-4 rounded-2xl shadow border-gray-100 border mb-3`,
                 selectCar === item.id &&
                   tw`border-green-400 shadow shadow-green-200`,
               ]}
             >
               <Image
-                source={item.image}
+                source={{ uri: item.image_url }}
                 style={{
                   width: 90,
                   height: 60,

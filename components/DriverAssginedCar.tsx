@@ -55,17 +55,17 @@ export default function DriverAssginedCar() {
           <Ionicons name="car-sport" size={22} color="#3B82F6" style={tw`mr-3`} />
           <View>
             <Text style={tw`text-sm font-semibold text-gray-900`}>
-              {driver.carModel}
+              {driver.car_model}
             </Text>
             <Text style={tw`text-xs text-gray-500 mt-0.5`}>
-              {driver.carColor ?? 'Color'} • {driver.carType ?? 'Standard'}
+              {driver.color ?? 'Color'} • {driver.ride_type ?? 'Standard'}
             </Text>
           </View>
         </View>
 
         <View style={tw`bg-gray-900 px-3 py-2 rounded-xl`}>
           <Text style={tw`text-white font-bold tracking-widest`}>
-            {driver.plateNumber}
+            {driver.plate_number}
           </Text>
         </View>
       </View>

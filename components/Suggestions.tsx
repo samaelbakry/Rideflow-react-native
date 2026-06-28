@@ -1,13 +1,24 @@
 import { View, Text, TouchableOpacity, Image, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "expo-router";
 import tw from "twrnc";
 import { useAppSelector } from "@/store/store";
 import { selectOrigin } from "@/store/slices/rideFlowSlice";
-import { cars } from "@/constants/ride";
+import { Car } from "@/types/rideTypes";
+import { getCars } from "@/services/rideData";
 
 export default function Suggestions() {
   const origin = useAppSelector(selectOrigin);
+    const [cars, setCars] = useState<Car[]>([]);
+    useEffect(() => {
+    async function loadCars() {
+      const data = await getCars();
+      setCars(data);
+    }
+
+    loadCars();
+  }, []);
+
   return (
     <>
       <View style={tw`flex-row items-center justify-between my-2 px-3`}>
@@ -27,7 +38,7 @@ export default function Suggestions() {
             style={tw`bg-white/60 rounded-2xl p-4 shadow-md border border-gray-100 w-40 ${origin ? "opacity-100" : "opacity-80"}`}
           >
             <Image
-              source={item.image}
+              source={{uri:item.image_url}}
               style={{
                 width: 120,
                 height: 80,

@@ -1,16 +1,37 @@
-import { cars, drivers } from "@/constants/ride";
+import { getCars, getDrivers } from "@/services/rideData";
 import { selectedCar, setSelectedDriver } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import React from "react";
+import { Car, Driver } from "@/types/rideTypes";
+import React, { useEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
 
 export default function DriverList() {
   const dispatch = useAppDispatch();
+  const [cars, setCars] = useState<Car[]>([]);
+  const [drivers, setDrivers] = useState<Driver[]>([]);
   const selectedCarType = useAppSelector(selectedCar);
+
+  useEffect(() => {
+  async function loadData() {
+    try {
+      const [carsData, driversData] = await Promise.all([
+        getCars(),
+        getDrivers(),
+      ]);
+
+      setCars(carsData);
+      setDrivers(driversData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  loadData();
+}, []);
+
   const driversData = drivers.filter((driver) =>
-  cars.find((car) => car.id === selectedCarType)?.title === driver.rideType
-);
+  cars.find((car) => car.id === selectedCarType)?.title === driver.ride_type);
 
   return (  
     <FlatList
@@ -20,12 +41,12 @@ export default function DriverList() {
       renderItem={({ item }) => (
         <TouchableOpacity
         onPress={() => {
-          if (!item.isAvailable) return;
+          if (!item.is_available) return;
           dispatch(setSelectedDriver(item));
         }}
         style={[
           tw`bg-white rounded-3xl p-4 mb-4 shadow-sm`,
-          !item.isAvailable && tw`opacity-50`,
+          !item.is_available && tw`opacity-50`,
         ]}
         >
           <View style={tw`flex-row justify-between items-start`}>
@@ -34,7 +55,7 @@ export default function DriverList() {
                 {item.name}
               </Text>
               <Text style={tw`text-sm text-gray-500 mt-0.5`}>
-                {item.rideType}
+                {item.ride_type}
               </Text>
             </View>
 
@@ -59,25 +80,25 @@ export default function DriverList() {
               </View>
               <View>
                 <Text style={tw`text-sm font-medium text-gray-800`}>
-                  {item.carModel}
+                  {item.car_model}
                 </Text>
                 <Text style={tw`text-xs text-gray-500 mt-0.5`}>
-                  {item.plateNumber}
+                  {item.plate_number}
                 </Text>
               </View>
             </View>
 
             <View
               style={tw`px-3 py-1.5 rounded-full ${
-                item.isAvailable ? "bg-green-100" : "bg-red-100"
+                item.is_available ? "bg-green-100" : "bg-red-100"
               }`}
             >
               <Text
                 style={tw`text-xs font-bold ${
-                  item.isAvailable ? "text-green-700" : "text-red-600"
+                  item.is_available ? "text-green-700" : "text-red-600"
                 }`}
                 >
-                {item.isAvailable ? "● Available" : "● Unavailable"}
+                {item.is_available ? "● Available" : "● Unavailable"}
               </Text>
             </View>
           </View>

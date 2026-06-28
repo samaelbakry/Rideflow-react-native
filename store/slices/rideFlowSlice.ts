@@ -11,7 +11,9 @@ type RideStatus =
 
 type RideFlowState = {
   origin: LatLng | null;
+  originDescription: string;
   destination: LatLng | null;
+  destinationDescription: string;
   travelTimeInformation: any;
   selectedCar: string | null;
   selectedDriver: any | null;
@@ -22,6 +24,8 @@ type RideFlowState = {
 const initialState: RideFlowState = {
   origin: null,
   destination: null,
+  originDescription: "",
+  destinationDescription: "",
   travelTimeInformation: null,
   selectedCar: null,
   selectedDriver: null,
@@ -35,9 +39,11 @@ const RideFlowSlice = createSlice({
   reducers: {
     setOrigin: (state, action) => {
       state.origin = action.payload;
+      state.originDescription = action.payload.description;
     },
     setDestination: (state, action) => {
       state.destination = action.payload;
+      state.destinationDescription = action.payload.description;
       state.rideStatus = "selecting_car";
     },
     setTravelInfo: (state, action) => {
@@ -89,12 +95,20 @@ export const {
 } = RideFlowSlice.actions;
 
 export const selectOrigin = (state: RootState) => state.rideFlow.origin;
+export const selectOriginDescription = (state: RootState) =>
+  state.rideFlow.originDescription;
+
 export const selectDestination = (state: RootState) =>
   state.rideFlow.destination;
-export const selectTravelTimeInformation = (state: RootState) =>
-  state.rideFlow.travelTimeInformation;
+export const selectDestinationDescription = (state: RootState) =>
+  state.rideFlow.destinationDescription;
+
+export const rideState = (state: RootState) => state.rideFlow.rideStatus;
+
 export const selectedCar = (state: RootState) => state.rideFlow.selectedCar;
 export const selectedDriver = (state: RootState) =>
   state.rideFlow.selectedDriver;
-export const rideState = (state: RootState) => state.rideFlow.rideStatus;
 export const driverArrived = (state: RootState) => state.rideFlow.driverArrived;
+
+export const selectTravelTimeInformation = (state: RootState) =>
+  state.rideFlow.travelTimeInformation;

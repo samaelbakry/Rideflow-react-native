@@ -95,7 +95,7 @@ export default function SearchBar() {
               onPress={() => {
                 dispatch(
                   setOrigin({
-                    location: item.display_name,
+                    description: item.display_name,
                     latitude: parseFloat(item.lat),
                     longitude: parseFloat(item.lon),
                   }),
