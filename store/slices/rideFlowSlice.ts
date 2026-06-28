@@ -10,6 +10,8 @@ type RideStatus =
   | "trip_ended";
 
 type RideFlowState = {
+  rideStatus: RideStatus;
+  rideId:string | null
   origin: LatLng | null;
   originDescription: string;
   destination: LatLng | null;
@@ -18,10 +20,12 @@ type RideFlowState = {
   selectedCar: string | null;
   selectedDriver: any | null;
   driverArrived: boolean;
-  rideStatus: RideStatus;
+  tripEndedAt: string | null;
+  price:number
 };
 
 const initialState: RideFlowState = {
+  rideId:null,
   origin: null,
   destination: null,
   originDescription: "",
@@ -31,12 +35,17 @@ const initialState: RideFlowState = {
   selectedDriver: null,
   driverArrived: false,
   rideStatus: "idle",
+  tripEndedAt:null,
+  price:0
 };
 
 const RideFlowSlice = createSlice({
   name: "rideFlow",
   initialState,
   reducers: {
+    setRideId:(state , action)=>{
+      state.rideId = action.payload
+    },
     setOrigin: (state, action) => {
       state.origin = action.payload;
       state.originDescription = action.payload.description;
@@ -58,6 +67,9 @@ const RideFlowSlice = createSlice({
       state.driverArrived = false;
       state.rideStatus = "driver_assigned";
     },
+    setPrice: (state, action) => {
+    state.price = action.payload;
+    },
     startTrip: (state) => {
       state.rideStatus = "trip_started";
     },
@@ -66,13 +78,15 @@ const RideFlowSlice = createSlice({
     },
     endTrip: (state) => {
       state.rideStatus = "trip_ended";
+      state.tripEndedAt = new Date().toISOString();
     },
     startOver: (state) => {
       state.rideStatus = "idle";
       state.driverArrived = false;
+
+      state.rideId = null
       state.selectedDriver = null;
       state.selectedCar = null;
-
       state.origin = null;
       state.destination = null;
       state.travelTimeInformation = null;
@@ -83,6 +97,7 @@ const RideFlowSlice = createSlice({
 export const rideFlowReducer = RideFlowSlice.reducer;
 
 export const {
+  setRideId,
   setOrigin,
   setDestination,
   setTravelInfo,
@@ -92,6 +107,7 @@ export const {
   startTrip,
   endTrip,
   startOver,
+  setPrice
 } = RideFlowSlice.actions;
 
 export const selectOrigin = (state: RootState) => state.rideFlow.origin;
@@ -104,11 +120,14 @@ export const selectDestinationDescription = (state: RootState) =>
   state.rideFlow.destinationDescription;
 
 export const rideState = (state: RootState) => state.rideFlow.rideStatus;
+export const selectedRideId = (state: RootState) => state.rideFlow.rideId;
+export const selectPrice = (state: RootState) => state.rideFlow.price;
 
 export const selectedCar = (state: RootState) => state.rideFlow.selectedCar;
-export const selectedDriver = (state: RootState) =>
-  state.rideFlow.selectedDriver;
+export const selectedDriver = (state: RootState) =>state.rideFlow.selectedDriver;
+
 export const driverArrived = (state: RootState) => state.rideFlow.driverArrived;
+export const selectTripEndedAt = (state: RootState) => state.rideFlow.tripEndedAt;
 
 export const selectTravelTimeInformation = (state: RootState) =>
   state.rideFlow.travelTimeInformation;

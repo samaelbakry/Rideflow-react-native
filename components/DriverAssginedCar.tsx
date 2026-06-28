@@ -1,15 +1,29 @@
-import { driverArrived, selectedDriver, startTrip } from '@/store/slices/rideFlowSlice'
+import { driverArrived, selectedDriver, selectedRideId, startTrip } from '@/store/slices/rideFlowSlice'
 import { useAppDispatch, useAppSelector } from '@/store/store'
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 import tw from "twrnc"
 import CancelRideButton from './CancelRideButton'
+import { updateRideStatus } from '@/services/rideData'
 
 export default function DriverAssginedCar() {
   const dispatch = useAppDispatch()
   const driver = useAppSelector(selectedDriver)
   const driverIsHere = useAppSelector(driverArrived)
+  const rideId = useAppSelector(selectedRideId)
+
+  async function handlePress() {
+  try {
+    if (!rideId) return;
+
+    await updateRideStatus(rideId, "trip_started");
+
+    dispatch(startTrip());
+  } catch (error) {
+    console.log(error);
+  }
+}
 
   if (!driver) return null
 
@@ -71,7 +85,7 @@ export default function DriverAssginedCar() {
       </View>
       
       { driverIsHere &&  <TouchableOpacity
-        onPress={() => dispatch(startTrip())}
+        onPress={handlePress}
         style={tw`bg-blue-500 p-4 rounded-xl active:bg-blue-600`}
         activeOpacity={0.85}
       >

@@ -2,6 +2,7 @@ import { getCars } from "@/services/rideData";
 import {
   selectedCar,
   selectTravelTimeInformation,
+  setPrice,
   setSelectedCar,
 } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -47,6 +48,7 @@ export default function DriverCard() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => {
+                dispatch(setPrice(price))
                 dispatch(setSelectedCar(item.id));
               }}
               style={[

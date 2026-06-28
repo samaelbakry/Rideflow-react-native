@@ -6,6 +6,7 @@ import {
   selectedDriver,
   selectOrigin,
   setDriverPosition,
+  selectedRideId,
   setTravelInfo,
 } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -18,6 +19,7 @@ import DestinationMark from "./DestinationMark";
 import DestinationRoutePolyline from "./DestinationRoutePolyline";
 import StaticCars from "./StaticCars";
 import UserOriginMark from "./UserOriginMark";
+import { updateRideStatus } from "@/services/rideData";
 
 export default function MapContent() {
   const origin = useAppSelector(selectOrigin);
@@ -27,8 +29,10 @@ export default function MapContent() {
   const dispatch = useAppDispatch();
   const rideStatus = useAppSelector(rideState);
   const driver = useAppSelector(selectedDriver);
+  const rideId = useAppSelector(selectedRideId);
   const mapRef = useRef<MapView>(null);
 
+  
   async function handleRoute() {
     if (!origin) return;
 
@@ -105,7 +109,7 @@ export default function MapContent() {
 
     let i = 1;
 
-    const timer = setInterval(() => {
+    const timer = setInterval(async () => {
       if (i >= routeCoords.length) {
         clearInterval(timer);
 
@@ -115,6 +119,9 @@ export default function MapContent() {
         }
 
         if (rideStatus === "trip_started") {
+          if (rideId) {
+           await updateRideStatus(rideId!, "trip_ended");
+          }
           dispatch(endTrip());
           setCarPosition(null);
         }

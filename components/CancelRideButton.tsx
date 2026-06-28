@@ -1,5 +1,6 @@
-import { startOver } from "@/store/slices/rideFlowSlice";
-import { useAppDispatch } from "@/store/store";
+import { updateRideStatus } from "@/services/rideData";
+import { selectedRideId, startOver } from "@/store/slices/rideFlowSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
@@ -8,9 +9,11 @@ import tw from "twrnc";
 export default function CancelRideButton() {
   const dispatch = useAppDispatch();
   const navigate = useRouter();
+  const rideId = useAppSelector(selectedRideId)
 
-  const handleClick = () => {
+  const handleClick = async() => {
     dispatch(startOver());
+    await updateRideStatus(rideId!,"trip_ended")
     navigate.back();
   };
 
