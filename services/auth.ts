@@ -21,6 +21,7 @@ export async function login(values: LoginSchemaType) {
     id: profile.id,
     name: profile.full_name,
     email: profile.email,
+    avatar_url:profile.avatar_url
   };
 }
 
