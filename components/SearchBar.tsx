@@ -1,6 +1,10 @@
 import { getSearchvalue } from "@/services/searchAutocomplete-service";
-import { setDestination, setOrigin } from "@/store/slices/rideFlowSlice";
-import { useAppDispatch } from "@/store/store";
+import {
+  selectOrigin,
+  setDestination,
+  setOrigin,
+} from "@/store/slices/rideFlowSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
@@ -21,6 +25,13 @@ export default function SearchBar() {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useAppDispatch();
+  const origin = useAppSelector(selectOrigin);
+
+  useEffect(() => {
+    if (origin) {
+      setRideDestination(origin.description!);
+    }
+  }, [origin]);
 
   useEffect(() => {
     const delay = setTimeout(() => {

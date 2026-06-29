@@ -17,7 +17,6 @@ export default function Maps() {
   return (
     <View style={tw`flex-1`}>
       <MapContent />
-
       <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
         <BottomSheetView style={tw`flex-1`}>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

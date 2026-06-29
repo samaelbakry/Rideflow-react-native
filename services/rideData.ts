@@ -69,3 +69,11 @@ export async function getUserRides(userId: string) {
 
   return data;
 }
+
+export async function clearRideHistory(userId:string) {
+  const {error} = await supabase
+  .from("rides")
+  .delete()
+  .eq("user_id" , userId)
+   if (error) throw error;
+}
