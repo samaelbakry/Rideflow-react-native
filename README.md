@@ -1,50 +1,51 @@
-# Welcome to your Expo app 👋
+# RideFlow 
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+RideFlow is a React Native mobile application built with Expo that simulates a modern ride-hailing experience. The app allows users to sign in or create an account, choose a pickup and destination, view available vehicle options, track assigned drivers, follow trip progress on a map, review past rides, and manage their profile.
 
-## Get started
+## Overview
 
-1. Install dependencies
+The project is structured as an Expo Router application with typed routes, Redux-based state management, Supabase authentication and data storage, and map rendering powered by React Native Maps. It focuses on a smooth mobile-first experience for booking and tracking rides.
 
-   ```bash
-   npm install
-   ```
+## Key Features
 
-2. Start the app
+- User authentication with login and registration screens
+- Protected navigation based on authentication state
+- Home screen for pickup and destination search
+- Vehicle and driver selection flow
+- Route visualization using map polyline data
+- Ride lifecycle states such as driver assigned and trip started
+- Ride history and activity tracking
+- Profile editing with avatar upload support
+- Responsive mobile UI built with React Native and Tailwind-style utilities
 
-   ```bash
-   npx expo start
-   ```
+## Tech Stack
 
-In the output, you'll find options to open the app in a
+- React Native with Expo
+- Expo Router for file-based navigation
+- TypeScript
+- Redux Toolkit for application state
+- React Hook Form and Zod for form handling and validation
+- Supabase for authentication, database, and storage
+- React Native Maps and map direction services
+- Tailwind-style styling via twrnc
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- app/ - application screens and route-based pages
+- components/ - reusable UI building blocks and map-related components
+- constants/ - shared app constants
+- hooks/ - custom hooks
+- lib/ - external service initialization
+- providers/ - auth and Redux providers
+- schemas/ - validation schemas
+- services/ - API and backend integration helpers
+- store/ - Redux store and slices
+- types/ - shared TypeScript interfaces and props
 
-## Get a fresh project
+## Notes
 
-When you're ready, run:
+This application expects Supabase tables and storage buckets for authentication and ride-related data, including profile, car, driver, and ride records. The app uses the OSRM routing service for map directions and route geometry.
 
-```bash
-npm run reset-project
-```
+## Development Status
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This repository represents a functional mobile app prototype with authentication, map-based ride flow, profile management, and ride history.
