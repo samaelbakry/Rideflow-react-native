@@ -1,12 +1,11 @@
 import MapContent from "@/components/MapContent";
 import NavigateCard from "@/components/NavigateCard";
 import React, { useMemo, useRef } from "react";
-import { Keyboard, View } from "react-native";
+import { View } from "react-native";
 import tw from "twrnc";
 
 import BottomSheet, {
-  BottomSheetView,
-  TouchableWithoutFeedback,
+  BottomSheetScrollView
 } from "@gorhom/bottom-sheet";
 
 export default function Maps() {
@@ -17,12 +16,21 @@ export default function Maps() {
   return (
     <View style={tw`flex-1`}>
       <MapContent />
-      <BottomSheet ref={bottomSheetRef} index={1} snapPoints={snapPoints}>
-        <BottomSheetView style={tw`flex-1`}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <NavigateCard />
-          </TouchableWithoutFeedback>
-        </BottomSheetView>
+      <BottomSheet
+        keyboardBehavior="interactive"
+        keyboardBlurBehavior="restore"
+        enablePanDownToClose
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        android_keyboardInputMode="adjustResize"
+      >
+        <BottomSheetScrollView
+          keyboardShouldPersistTaps="handled"
+          style={tw`flex-1`}
+        >
+          <NavigateCard />
+        </BottomSheetScrollView>
       </BottomSheet>
     </View>
   );

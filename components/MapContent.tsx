@@ -131,7 +131,7 @@ export default function MapContent() {
 
       setCarPosition(routeCoords[i]);
       i++;
-    }, 700);
+    }, 200);
 
     return () => clearInterval(timer);
   }, [routeCoords, rideStatus]);

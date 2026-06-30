@@ -101,7 +101,7 @@ export default function DriverList() {
             }
           }}
           style={[
-            tw`bg-white rounded-3xl p-4 mb-4 shadow-sm`,
+            tw`bg-white rounded-3xl p-4 mb-4 shadow border border-gray-200`,
             !item.is_available && tw`opacity-50`,
           ]}
         >

@@ -34,8 +34,8 @@ export default function Activity() {
 
   if (loading) {
     return (
-      <View style={tw`flex-1 justify-center items-center`}>
-        <ActivityIndicator size="large" />
+      <View style={tw`flex-1 bg-white/90 justify-center items-center`}>
+        <ActivityIndicator size="large" color={"gray"} />
       </View>
     );
   }

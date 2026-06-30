@@ -55,16 +55,28 @@ export async function updateRideStatus(
 export async function getUserRides(userId: string) {
  const { data , error } = await supabase
   .from("rides")
-  .select(`
+.select(`
     *,
-    drivers(name, rating, car_model , ride_type),
-    cars(title, image_url)
+    drivers!rides_driver_id_fkey(
+      name,
+      rating,
+      car_model,
+      ride_type
+    ),
+    cars(
+      title,
+      image_url
+    ),
+    ride_reviews!ride_reviews_ride_id_fkey(
+      rating,
+      comment
+    )
   `)
     .eq("user_id", userId)
     .order("created_at", {
       ascending: false,
     });
-
+ 
   if (error) throw error;
 
   return data;

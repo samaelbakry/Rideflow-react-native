@@ -26,17 +26,14 @@ export default function Account() {
 
   return (
     <View style={tw`bg-white/90 flex-1 px-6`}>
-      <View style={tw`items-center mt-24 mb-14`}>
+      <View style={tw`items-center mt-24 mb-10`}>
         {user?.avatar_url ? <Image source={{uri: user.avatar_url}} style={tw`size-29 rounded-full shadow mb-6`}/> : <>
         <View
           style={tw`size-29 rounded-full shadow bg-zinc-300 items-center justify-center mb-6`}
         >
         <Text style={tw`text-zinc-800 text-5xl font-bold`}>{initial}</Text>
-          
         </View>
         </> }
-        
-
         <Text style={tw`text-zinc-800 text-3xl font-bold mb-2`}>
           {user?.name || "Guest User"}
         </Text>

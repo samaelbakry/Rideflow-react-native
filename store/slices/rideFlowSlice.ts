@@ -111,13 +111,10 @@ export const {
 } = RideFlowSlice.actions;
 
 export const selectOrigin = (state: RootState) => state.rideFlow.origin;
-export const selectOriginDescription = (state: RootState) =>
-  state.rideFlow.originDescription;
+export const selectOriginDescription = (state: RootState) =>state.rideFlow.originDescription;
 
-export const selectDestination = (state: RootState) =>
-  state.rideFlow.destination;
-export const selectDestinationDescription = (state: RootState) =>
-  state.rideFlow.destinationDescription;
+export const selectDestination = (state: RootState) =>state.rideFlow.destination;
+export const selectDestinationDescription = (state: RootState) =>state.rideFlow.destinationDescription;
 
 export const rideState = (state: RootState) => state.rideFlow.rideStatus;
 export const selectedRideId = (state: RootState) => state.rideFlow.rideId;
@@ -129,5 +126,4 @@ export const selectedDriver = (state: RootState) =>state.rideFlow.selectedDriver
 export const driverArrived = (state: RootState) => state.rideFlow.driverArrived;
 export const selectTripEndedAt = (state: RootState) => state.rideFlow.tripEndedAt;
 
-export const selectTravelTimeInformation = (state: RootState) =>
-  state.rideFlow.travelTimeInformation;
+export const selectTravelTimeInformation = (state: RootState) => state.rideFlow.travelTimeInformation;

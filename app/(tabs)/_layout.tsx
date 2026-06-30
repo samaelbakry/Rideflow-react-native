@@ -20,7 +20,7 @@ export default function TabLayout() {
 
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: "600",
+          fontWeight: "700",
         },
       }}
     >
@@ -51,21 +51,7 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="services"
-        options={{
-          title: "Services",
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "grid" : "grid-outline"}
-              size={24}
-              color={color}
-            />
-          ),
-        }}
-      />
-
+     
       <Tabs.Screen
         name="account"
         options={{
@@ -73,6 +59,19 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? "person" : "person-outline"}
+              size={24}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "cog" : "cog-outline"}
               size={24}
               color={color}
             />

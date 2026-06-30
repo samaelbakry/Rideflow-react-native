@@ -13,22 +13,26 @@ import { Link } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
+import RatingDriver from "./RatingDriver";
 
 export default function TripStarted() {
   const dispatch = useAppDispatch();
   const status = useAppSelector(rideState);
   const isEnded = status === "trip_ended";
   const driver = useAppSelector(selectedDriver);
-  
+
   const origin = useAppSelector(selectOriginDescription);
   const destination = useAppSelector(selectDestinationDescription);
   const travelData = useAppSelector(selectTravelTimeInformation);
-  
+
   const tripEndedAt = useAppSelector(selectTripEndedAt);
 
   const arrivalTime = new Date(Date.now() + (travelData?.duration ?? 0) * 1000);
 
-  const formattedArrival = arrivalTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit"});
+  const formattedArrival = arrivalTime.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return (
     <View style={tw`flex-1 justify-between bg-gray-50 px-5 pt-12 pb-8`}>
@@ -96,14 +100,7 @@ export default function TripStarted() {
             </View>
           </View>
         ) : (
-          <View
-            style={tw`bg-emerald-50 rounded-2xl p-4 border border-emerald-100 items-center`}
-          >
-            <Text style={tw`text-sm text-emerald-800 font-medium text-center`}>
-              Hope you enjoyed your ride! Your receipt has been sent to your
-              email.
-            </Text>
-          </View>
+          <RatingDriver />
         )}
       </View>
 
@@ -122,7 +119,6 @@ export default function TripStarted() {
                 {driver.car_model}.
               </Text>
               <Text style={tw`text-xs text-gray-500`}>
-                {" "}
                 {driver.name} • {driver.rating} ★
               </Text>
             </View>
@@ -135,21 +131,23 @@ export default function TripStarted() {
             </View>
           </View>
         ) : (
-          <Link
-            href="/"
-            onPress={() => {
-              dispatch(startOver());
-            }}
-            asChild
-          >
-            <TouchableOpacity
-              style={tw`bg-gray-900 w-full py-4 rounded-2xl items-center justify-center shadow-sm active:opacity-90`}
+          <>
+            <Link
+              href="/"
+              onPress={() => {
+                dispatch(startOver());
+              }}
+              asChild
             >
-              <Text style={tw`text-white font-bold text-base`}>
-                Back to Home
-              </Text>
-            </TouchableOpacity>
-          </Link>
+              <TouchableOpacity
+                style={tw`bg-gray-900 w-full py-4 my-1 rounded-2xl items-center justify-center shadow-sm active:opacity-90`}
+              >
+                <Text style={tw`text-white font-bold text-base`}>
+                  Back to Home
+                </Text>
+              </TouchableOpacity>
+            </Link>
+          </>
         )}
       </View>
     </View>

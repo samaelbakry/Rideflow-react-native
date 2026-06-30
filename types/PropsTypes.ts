@@ -33,3 +33,10 @@ export type CreateRideProps = {
   status: string;
 };
 
+export type RideReview ={
+  ride_id: string;
+  driver_id: string;
+  user_id: string;
+  rating: number;
+  comment?: string;
+}
