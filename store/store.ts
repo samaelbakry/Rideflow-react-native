@@ -1,12 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from "react-redux";
-import {rideFlowReducer} from "./slices/rideFlowSlice"
-import authReducer from "./slices/authSlice"
+import {rideFlowReducer} from "./slices/rideFlowSlice";
+import authReducer from "./slices/authSlice";
+import { themeReducer } from './slices/themeSlice';
 
 export const store = configureStore({
   reducer: {
     rideFlow:rideFlowReducer,
-    auth:authReducer
+    auth:authReducer,
+    theme:themeReducer
   },
 })
 

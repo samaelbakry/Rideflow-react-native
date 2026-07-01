@@ -77,7 +77,7 @@ export default function EditProfile() {
   }
 
   return (
-    <View style={tw`flex-1 bg-white/90 px-6 pt-14`}>
+    <View style={tw`flex-1 bg-white/90 px-6 pt-16`}>
       <Text style={tw`text-3xl font-bold text-zinc-900 mb-8`}>
         Edit Profile
       </Text>

@@ -2,7 +2,8 @@ import React from "react"
 
 export type ContainerProps = {
     children :React.ReactNode,
-    className?:string
+    className?:string,
+    style?:object
 }
 
 export type LatLng = {

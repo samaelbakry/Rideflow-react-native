@@ -1,22 +1,14 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import * as SplashScreen from "expo-splash-screen";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import ReduxProvider from "@/providers/ReduxProvider";
-import { useEffect, useState } from "react";
 import AnimatedSplash from "@/components/AnimatedSplash";
+import AppNavigator from "@/providers/AppNavigator";
 import AuthProvider from "@/providers/AuthProvider";
+import ReduxProvider from "@/providers/ReduxProvider";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect, useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [ready, setReady] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
 
@@ -44,13 +36,7 @@ export default function RootLayout() {
     <ReduxProvider>
       <AuthProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <ThemeProvider
-            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-          >
-            <Stack screenOptions={{ headerShown: false }} />
-
-            <StatusBar style="auto" />
-          </ThemeProvider>
+         <AppNavigator/>
         </GestureHandlerRootView>
       </AuthProvider>
     </ReduxProvider>
