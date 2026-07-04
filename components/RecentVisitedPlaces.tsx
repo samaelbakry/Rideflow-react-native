@@ -71,7 +71,7 @@ export default function RecentVisitedPlaces() {
           scrollEnabled={false}
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={[tw`flex-row items-center py-3 rounded-xl px-2` , theme.card]}
+              style={[tw`flex-row items-center py-3 rounded-xl px-2 mb-3 shadow-md` , theme.card]}
             >
               <View
                 style={[

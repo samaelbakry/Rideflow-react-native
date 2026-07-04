@@ -24,6 +24,8 @@ import { registerSchema, RegisterSchemaType } from "@/schemas/auth-schemas";
 import { register } from "@/services/auth";
 import { setUser } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/store";
+import { createThemeStyles } from "@/constants/theme";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 
 type FieldNames = "fullName" | "email" | "password" | "confirmPassword";
 
@@ -31,6 +33,9 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [focusedInput, setFocusedInput] = useState<FieldNames | null>(null);
+
+  const colors = useThemeColors();
+  const theme = createThemeStyles(colors);
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -64,7 +69,7 @@ export default function Register() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={tw`flex-1 bg-white/90`} edges={["top"]}>
+      <SafeAreaView style={[tw`flex-1`, theme.container]} edges={["top"]}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={tw`flex-1`}
@@ -76,54 +81,66 @@ export default function Register() {
             <View style={tw`items-center mb-10`}>
               <Logo />
               <Text
-                style={tw`text-gray-400 text-sm font-medium tracking-widest uppercase mt-3`}
+                style={[
+                  tw`text-sm font-medium tracking-widest uppercase mt-3`,
+                  theme.mutedText,
+                ]}
               >
                 Move smarter.
               </Text>
             </View>
+
             <View style={tw`mb-8`}>
               <Text
-                style={tw`text-black text-4xl font-extrabold tracking-tighter mb-1.5`}
+                style={[
+                  tw`text-4xl font-extrabold tracking-tighter mb-1.5`,
+                  theme.text,
+                ]}
               >
                 Create Account
               </Text>
               <Text
-                style={tw`text-gray-500 text-base font-normal tracking-wide`}
+                style={[
+                  tw`text-base font-normal tracking-wide`,
+                  theme.secondaryText,
+                ]}
               >
                 Join RideFlow and start your journey.
               </Text>
             </View>
+
             <Controller
               control={control}
               name="fullName"
               render={({ field: { onChange, value } }) => (
                 <View style={tw`mb-4`}>
                   <View
-                    style={tw.style(
-                      `bg-gray-50 border shadow-sm rounded-2xl px-5 h-14 flex-row items-center`,
+                    style={[
+                      tw`border rounded-2xl px-5 h-14 flex-row items-center`,
+                      theme.input,
                       errors.fullName
-                        ? "border-red-500"
+                        ? { borderColor: colors.danger }
                         : focusedInput === "fullName"
-                          ? "border-black"
-                          : "border-gray-100",
-                    )}
+                        ? { borderColor: colors.primary }
+                        : null,
+                    ]}
                   >
                     <Ionicons
                       name="person-outline"
                       size={20}
                       color={
                         errors.fullName
-                          ? "#ef4444"
+                          ? colors.danger
                           : focusedInput === "fullName"
-                            ? "#000000"
-                            : "#9ca3af"
+                          ? colors.primary
+                          : colors.icon
                       }
                     />
                     <TextInput
                       placeholder="Full Name"
-                      placeholderTextColor="#9ca3af"
+                      placeholderTextColor={colors.textMuted}
                       autoCorrect={false}
-                      style={tw`flex-1 ml-3 text-black text-base h-full`}
+                      style={[tw`flex-1 ml-3 text-base h-full`, theme.text]}
                       value={value}
                       onChangeText={onChange}
                       onFocus={() => setFocusedInput("fullName")}
@@ -131,7 +148,7 @@ export default function Register() {
                     />
                   </View>
                   {errors.fullName && (
-                    <Text style={tw`text-red-500 text-xs mt-2 ml-1`}>
+                    <Text style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}>
                       {errors.fullName.message}
                     </Text>
                   )}
@@ -145,33 +162,34 @@ export default function Register() {
               render={({ field: { onChange, value } }) => (
                 <View style={tw`mb-4`}>
                   <View
-                    style={tw.style(
-                      `bg-gray-50 border shadow-sm rounded-2xl px-5 h-14 flex-row items-center`,
+                    style={[
+                      tw`border rounded-2xl px-5 h-14 flex-row items-center`,
+                      theme.input,
                       errors.email
-                        ? "border-red-500"
+                        ? { borderColor: colors.danger }
                         : focusedInput === "email"
-                          ? "border-black"
-                          : "border-gray-100",
-                    )}
+                        ? { borderColor: colors.primary }
+                        : null,
+                    ]}
                   >
                     <Ionicons
                       name="mail-outline"
                       size={20}
                       color={
                         errors.email
-                          ? "#ef4444"
+                          ? colors.danger
                           : focusedInput === "email"
-                            ? "#000000"
-                            : "#9ca3af"
+                          ? colors.primary
+                          : colors.icon
                       }
                     />
                     <TextInput
                       placeholder="Email"
-                      placeholderTextColor="#9ca3af"
+                      placeholderTextColor={colors.textMuted}
                       keyboardType="email-address"
                       autoCapitalize="none"
                       autoCorrect={false}
-                      style={tw`flex-1 ml-3 text-black text-base h-full`}
+                      style={[tw`flex-1 ml-3 text-base h-full`, theme.text]}
                       value={value}
                       onChangeText={onChange}
                       onFocus={() => setFocusedInput("email")}
@@ -179,7 +197,7 @@ export default function Register() {
                     />
                   </View>
                   {errors.email && (
-                    <Text style={tw`text-red-500 text-xs mt-2 ml-1`}>
+                    <Text style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}>
                       {errors.email.message}
                     </Text>
                   )}
@@ -193,33 +211,34 @@ export default function Register() {
               render={({ field: { onChange, value } }) => (
                 <View style={tw`mb-4`}>
                   <View
-                    style={tw.style(
-                      `bg-gray-50 border shadow-sm rounded-2xl px-5 h-14 flex-row items-center`,
+                    style={[
+                      tw`border rounded-2xl px-5 h-14 flex-row items-center`,
+                      theme.input,
                       errors.password
-                        ? "border-red-500"
+                        ? { borderColor: colors.danger }
                         : focusedInput === "password"
-                          ? "border-black"
-                          : "border-gray-100",
-                    )}
+                        ? { borderColor: colors.primary }
+                        : null,
+                    ]}
                   >
                     <Ionicons
                       name="lock-closed-outline"
                       size={20}
                       color={
                         errors.password
-                          ? "#ef4444"
+                          ? colors.danger
                           : focusedInput === "password"
-                            ? "#000000"
-                            : "#9ca3af"
+                          ? colors.primary
+                          : colors.icon
                       }
                     />
                     <TextInput
                       placeholder="Password"
-                      placeholderTextColor="#9ca3af"
+                      placeholderTextColor={colors.textMuted}
                       secureTextEntry={!showPassword}
                       autoCapitalize="none"
                       autoCorrect={false}
-                      style={tw`flex-1 ml-3 text-black text-base h-full`}
+                      style={[tw`flex-1 ml-3 text-base h-full`, theme.text]}
                       value={value}
                       onChangeText={onChange}
                       onFocus={() => setFocusedInput("password")}
@@ -232,12 +251,12 @@ export default function Register() {
                       <Ionicons
                         name={showPassword ? "eye-off-outline" : "eye-outline"}
                         size={22}
-                        color="#6b7280"
+                        color={colors.icon}
                       />
                     </TouchableOpacity>
                   </View>
                   {errors.password && (
-                    <Text style={tw`text-red-500 text-xs mt-2 ml-1`}>
+                    <Text style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}>
                       {errors.password.message}
                     </Text>
                   )}
@@ -251,33 +270,34 @@ export default function Register() {
               render={({ field: { onChange, value } }) => (
                 <View style={tw`mb-6`}>
                   <View
-                    style={tw.style(
-                      `bg-gray-50 border shadow-sm rounded-2xl px-5 h-14 flex-row items-center`,
+                    style={[
+                      tw`border rounded-2xl px-5 h-14 flex-row items-center`,
+                      theme.input,
                       errors.confirmPassword
-                        ? "border-red-500"
+                        ? { borderColor: colors.danger }
                         : focusedInput === "confirmPassword"
-                          ? "border-black"
-                          : "border-gray-100",
-                    )}
+                        ? { borderColor: colors.primary }
+                        : null,
+                    ]}
                   >
                     <Ionicons
                       name="lock-closed-outline"
                       size={20}
                       color={
                         errors.confirmPassword
-                          ? "#ef4444"
+                          ? colors.danger
                           : focusedInput === "confirmPassword"
-                            ? "#000000"
-                            : "#9ca3af"
+                          ? colors.primary
+                          : colors.icon
                       }
                     />
                     <TextInput
                       placeholder="Confirm Password"
-                      placeholderTextColor="#9ca3af"
+                      placeholderTextColor={colors.textMuted}
                       secureTextEntry={!showConfirmPassword}
                       autoCapitalize="none"
                       autoCorrect={false}
-                      style={tw`flex-1 ml-3 text-black text-base h-full`}
+                      style={[tw`flex-1 ml-3 text-base h-full`, theme.text]}
                       value={value}
                       onChangeText={onChange}
                       onFocus={() => setFocusedInput("confirmPassword")}
@@ -288,18 +308,14 @@ export default function Register() {
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     >
                       <Ionicons
-                        name={
-                          showConfirmPassword
-                            ? "eye-off-outline"
-                            : "eye-outline"
-                        }
+                        name={showConfirmPassword ? "eye-off-outline" : "eye-outline"}
                         size={22}
-                        color="#6b7280"
+                        color={colors.icon}
                       />
                     </TouchableOpacity>
                   </View>
                   {errors.confirmPassword && (
-                    <Text style={tw`text-red-500 text-xs mt-2 ml-1`}>
+                    <Text style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}>
                       {errors.confirmPassword.message}
                     </Text>
                   )}
@@ -310,26 +326,30 @@ export default function Register() {
             <TouchableOpacity
               disabled={isSubmitting}
               onPress={handleSubmit(onSubmit)}
-              activeOpacity={0.8}
-              style={tw.style(
-                "rounded-2xl h-14 items-center justify-center mb-8 shadow-sm",
-                isSubmitting ? "bg-gray-500" : "bg-black",
-              )}
+              activeOpacity={0.4}
+              style={[
+                tw`rounded-2xl h-14 items-center justify-center mb-8`,
+                isSubmitting
+                  ? { backgroundColor: colors.textMuted }
+                  : theme.card, 
+              ]}
             >
               {isSubmitting ? (
-                <ActivityIndicator color="white" />
+                <ActivityIndicator color={colors.onPrimary} />
               ) : (
-                <Text style={tw`text-white text-lg font-bold`}>
+                <Text style={[tw`font-semibold text-xl`, theme.text]}>
                   Create Account
                 </Text>
               )}
             </TouchableOpacity>
 
             <View style={tw`flex-row justify-center items-center`}>
-              <Text style={tw`text-gray-500`}>Already have an account?</Text>
+              <Text style={theme.secondaryText}>Already have an account?</Text>
               <Link href="/(auth)/login" asChild>
                 <TouchableOpacity>
-                  <Text style={tw`text-black font-semibold ml-2`}>Sign In</Text>
+                  <Text style={[tw`font-semibold ml-2`, { color: colors.primary }]}>
+                    Sign In
+                  </Text>
                 </TouchableOpacity>
               </Link>
             </View>

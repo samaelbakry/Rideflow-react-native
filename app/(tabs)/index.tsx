@@ -9,14 +9,18 @@ import tw from "twrnc";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import RecentVisitedPlaces from "@/components/RecentVisitedPlaces";
 import PromoCarousel from "@/components/PromoCarousel";
+import MiniMapPreview from "@/components/MiniMapPreview";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function HomeScreen() {
   const colors = useThemeColors();
   return (
+    <ScrollView>
     <Container style={[tw`flex-1 px-3 `, { backgroundColor: colors.background }]}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
           <View style={tw`flex-row justify-between items-center px-1`}>
+      
             <Logo />
             <GetCurrentLocation />
           </View>
@@ -25,8 +29,10 @@ export default function HomeScreen() {
           <Navoptions />
           <RecentVisitedPlaces/>
           <PromoCarousel/>
+          <MiniMapPreview/>
         </View>
       </TouchableWithoutFeedback>
     </Container>
+    </ScrollView>
   );
 }
