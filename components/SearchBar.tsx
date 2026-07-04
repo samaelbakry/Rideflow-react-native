@@ -76,7 +76,7 @@ export default function SearchBar() {
         placeholder="Where from?"
         placeholderTextColor={colors.textMuted}
         style={[
-          tw`p-3 pr-10 rounded-xl shadow-md border`,
+          tw`p-3 pr-10 rounded-2xl shadow-md border`,
           theme.input,
         ]}
       />
@@ -109,7 +109,7 @@ export default function SearchBar() {
       keyExtractor={(item, index) => index.toString()}
       keyboardShouldPersistTaps="handled"
       style={[
-        tw`rounded-xl mb-2`,
+        tw`rounded-2xl mb-2`,
         theme.card,
       ]}
       renderItem={({ item }) => (

@@ -154,6 +154,10 @@ chip: {
 primaryIconContainer: {
   backgroundColor: colors.primary,
 },
+emptyState: {
+  backgroundColor: colors.card,
+  borderColor: colors.border,
+},
 });
 
 export const Fonts = Platform.select({

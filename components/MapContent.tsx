@@ -8,6 +8,7 @@ import {
   setDriverPosition,
   selectedRideId,
   setTravelInfo,
+  selectDestinationDescription,
 } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import React, { useEffect, useRef, useState } from "react";
@@ -20,10 +21,14 @@ import DestinationRoutePolyline from "./DestinationRoutePolyline";
 import StaticCars from "./StaticCars";
 import UserOriginMark from "./UserOriginMark";
 import { updateRideStatus } from "@/services/rideData";
+import { selectUser } from "@/store/slices/authSlice";
+import { saveRecentPlace } from "@/services/recentRides";
 
 export default function MapContent() {
   const origin = useAppSelector(selectOrigin);
   const destination = useAppSelector(selectDestination);
+  const destinationDescription = useAppSelector(selectDestinationDescription)
+  const userId = useAppSelector(selectUser)?.id;
   const [routeCoords, setRouteCoords] = useState<LatLng[]>([]);
   const [carPosition, setCarPosition] = useState<LatLng | null>(null);
   const dispatch = useAppDispatch();
@@ -123,6 +128,13 @@ export default function MapContent() {
            await updateRideStatus(rideId!, "trip_ended");
           }
           dispatch(endTrip());
+          await saveRecentPlace({
+            user_id:userId!,
+            title:destinationDescription!,
+            address:destinationDescription!,
+            latitude: destination?.latitude!,
+            longitude: destination?.longitude!,
+          })
           setCarPosition(null);
         }
 

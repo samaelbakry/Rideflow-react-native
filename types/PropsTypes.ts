@@ -74,3 +74,19 @@ export type AppColors = {
   light: ColorTheme;
   dark: ColorTheme;
 };
+
+export type RecentPlace = {
+  user_id: string;
+  title: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+};
+
+export type Promo = {
+  id: string;
+  title: string;
+  subtitle: string;
+  button_text: string;
+  background_color: string;
+};

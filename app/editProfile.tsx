@@ -16,12 +16,12 @@ import {
   updateProfile,
   uploadAvatarToBucket,
 } from "@/services/userProfileSettings";
-import { setUser } from "@/store/slices/authSlice";
+import { selectUser, setUser } from "@/store/slices/authSlice";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { createThemeStyles } from "@/constants/theme";
 
 export default function EditProfile() {
-  const user = useAppSelector((state) => state.auth.user);
+  const user = useAppSelector(selectUser);
 
   const [name, setName] = useState(user?.name ?? "");
   const [image, setImage] = useState<string | null>(null);
@@ -55,9 +55,7 @@ export default function EditProfile() {
   };
 
   async function handleSave() {
-    const {
-      data: { user: authUser },
-    } = await supabase.auth.getUser();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
 
     if (!user || !authUser) return;
 
