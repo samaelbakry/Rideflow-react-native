@@ -41,3 +41,36 @@ export type RideReview ={
   rating: number;
   comment?: string;
 }
+
+type ColorTheme = {
+  primary: string;
+  onPrimary: string;
+  accent: string;
+
+
+  background: string;
+  surface: string;
+  card: string;
+
+  
+  text: string;
+  textSecondary: string;
+  textMuted: string;
+
+  border: string;
+  icon: string;
+  divider: string;
+
+  danger: string;
+  success: string;
+  warning: string;
+
+  tint: string;
+  tabIconDefault: string;
+  tabIconSelected: string;
+};
+
+export type AppColors = {
+  light: ColorTheme;
+  dark: ColorTheme;
+};

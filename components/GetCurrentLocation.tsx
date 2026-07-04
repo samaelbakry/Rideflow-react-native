@@ -1,4 +1,5 @@
 import { useCurrentLocation } from "@/hooks/use-current-location";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import { selectOrigin, setOrigin } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,6 +9,8 @@ import { TouchableOpacity } from "react-native";
 
 export default function GetCurrentLocation() {
   const dispatch = useAppDispatch();
+    const colors = useThemeColors();
+
   const origin = useAppSelector(selectOrigin);
 
   const { location } = useCurrentLocation();
@@ -43,7 +46,7 @@ export default function GetCurrentLocation() {
       <Ionicons
         name="location-sharp"
         size={20}
-        color={origin ? "gray" : "black"}
+        color={origin ? colors.onPrimary : colors.primary}
       />
     </TouchableOpacity>
   );

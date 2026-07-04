@@ -28,17 +28,18 @@ export default function RootLayout() {
 
   if (!ready) return null;
 
-  if (showIntro) {
-    return <AnimatedSplash onFinish={() => setShowIntro(false)} />;
-  }
 
   return (
-    <ReduxProvider>
+     <ReduxProvider>
+    {showIntro ? (
+      <AnimatedSplash onFinish={() => setShowIntro(false)} />
+    ) : (
       <AuthProvider>
         <GestureHandlerRootView style={{ flex: 1 }}>
-         <AppNavigator/>
+          <AppNavigator />
         </GestureHandlerRootView>
       </AuthProvider>
-    </ReduxProvider>
+    )}
+  </ReduxProvider>
   );
 }

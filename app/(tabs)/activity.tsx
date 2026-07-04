@@ -1,15 +1,32 @@
 import ClearActivityButton from "@/components/ClearActivityButton";
 import RideActivityItem from "@/components/RideActivityItem";
+import { createThemeStyles } from "@/constants/theme";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import { supabase } from "@/lib/supabase";
 import { getUserRides } from "@/services/rideData";
 import { CreateRideProps } from "@/types/PropsTypes";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import tw from "twrnc";
 
 export default function Activity() {
   const [rides, setRides] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const colors = useThemeColors();
+  const theme = createThemeStyles(colors);
+
+  const styles = {
+    container: {
+      backgroundColor: theme.container.backgroundColor,
+    },
+    text: {
+      color: theme.text.color,
+    },
+    secondaryText: {
+      color: theme.secondaryText.color,
+    },
+  };
 
   useEffect(() => {
     loadRides();
@@ -34,31 +51,42 @@ export default function Activity() {
 
   if (loading) {
     return (
-      <View style={tw`flex-1 bg-white/90 justify-center items-center`}>
-        <ActivityIndicator size="large" color={"gray"} />
+      <View
+        style={[
+          tw`flex-1 justify-center items-center`,
+          styles.container,
+        ]}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
 
   return (
-  <View style={tw`flex-1 bg-white/90 pt-12`}>
-    <View style={tw`flex-row justify-between items-center px-5 mt-5`}>
-      <Text style={tw`text-xl font-semibold`}>
-        Rides History
-      </Text>
-      {rides.length > 0 && <ClearActivityButton setRides={setRides}/>}
-    </View>
+    <View style={[tw`flex-1 pt-12`, styles.container]}>
+      <View style={tw`flex-row justify-between items-center px-5 mt-5`}>
+        <Text style={[tw`text-xl font-semibold`, styles.text]}>
+          Rides History
+        </Text>
+
+        {rides.length > 0 && (
+          <ClearActivityButton setRides={setRides} />
+        )}
+      </View>
+
       <FlatList
         data={rides}
         keyExtractor={(item) => item.id}
         contentContainerStyle={tw`p-4 pb-10`}
         ListEmptyComponent={() => (
           <View style={tw`flex-1 justify-center items-center mt-32 px-4`}>
-            <Text style={tw`text-gray-400 font-medium text-sm`}>No rides recorded yet</Text>
+            <Text style={[tw`font-medium text-sm`, styles.secondaryText]}>
+              No rides recorded yet
+            </Text>
           </View>
         )}
         renderItem={({ item }) => (
-         <RideActivityItem item={item as CreateRideProps}/>
+          <RideActivityItem item={item as CreateRideProps} />
         )}
       />
     </View>
