@@ -8,21 +8,36 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Car } from "@/types/rideTypes";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import tw from "twrnc";
+import { useThemeColors } from "@/hooks/use-theme-colors";
+import { createThemeStyles } from "@/constants/theme";
 
 export default function DriverCard() {
   const travelData = useAppSelector(selectTravelTimeInformation);
   const [cars, setCars] = useState<Car[]>([]);
 
+  const colors = useThemeColors();
+  const theme = createThemeStyles(colors);
+
   const distanceKm = (travelData?.distance ?? 0) / 1000;
   const travelDuration = (travelData?.duration ?? 0) / 60;
 
-  const formatDuration = travelDuration >= 60? `${(travelDuration / 60).toFixed(1)} hr` : `${Math.ceil(travelDuration)} min`;
+  const formatDuration =
+    travelDuration >= 60
+      ? `${(travelDuration / 60).toFixed(1)} hr`
+      : `${Math.ceil(travelDuration)} min`;
 
   const baseFare = distanceKm * 8;
+
   const dispatch = useAppDispatch();
-  const selectCar = useAppSelector(selectedCar);
+  const selected = useAppSelector(selectedCar);
 
   useEffect(() => {
     async function loadCars() {
@@ -34,58 +49,77 @@ export default function DriverCard() {
   }, []);
 
   return (
-    <>
-      <FlatList
-        showsHorizontalScrollIndicator={false}
-        data={cars}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={tw`px-4 py-2`}
-        ItemSeparatorComponent={() => <View style={tw`w-3`} />}
-        renderItem={({ item }) => {
-          const price = Math.round(baseFare * item.multiplier);
+    <FlatList
+      data={cars}
+      keyExtractor={(item) => item.id}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={tw`px-4 py-2`}
+      ItemSeparatorComponent={() => <View style={tw`h-3`} />}
+      renderItem={({ item }) => {
+        const price = Math.round(baseFare * item.multiplier);
 
-          return (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => {
-                dispatch(setPrice(price))
-                dispatch(setSelectedCar(item.id));
+        const isSelected = selected === item.id;
+
+        return (
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => {
+              dispatch(setPrice(price));
+              dispatch(setSelectedCar(item.id));
+            }}
+            style={[
+              tw`flex-row items-center p-4 rounded-2xl border`,
+              theme.card,
+              isSelected && theme.selectedCard
+            ]}
+          >
+            <Image
+              source={{ uri: item.image_url }}
+              style={{
+                width: 90,
+                height: 60,
+                resizeMode: "contain",
               }}
+            />
+
+            <View style={tw`flex-1 ml-4`}>
+              <Text
+                style={[
+                  tw`text-lg font-bold`,
+                  theme.text,
+                ]}
+              >
+                {item.title}
+              </Text>
+
+              <Text
+                style={[
+                  tw`text-sm mt-1`,
+                  theme.secondaryText,
+                ]}
+              >
+                {formatDuration} away
+              </Text>
+            </View>
+
+            <Text
               style={[
-                tw`flex-row items-center bg-white p-4 rounded-2xl shadow border-gray-100 border mb-3`,
-                selectCar === item.id &&
-                  tw`border-green-400 shadow shadow-green-200`,
+                tw`text-lg font-bold`,
+                {
+                  color: isSelected
+                    ? colors.primary
+                    : colors.text,
+                },
               ]}
             >
-              <Image
-                source={{ uri: item.image_url }}
-                style={{
-                  width: 90,
-                  height: 60,
-                  resizeMode: "contain",
-                }}
-              />
-
-              <View style={tw`flex-1 ml-4`}>
-                <Text style={tw`text-lg font-bold text-gray-900`}>
-                  {item.title}
-                </Text>
-
-                <Text style={tw`text-gray-500 text-sm mt-1`}>
-                  {formatDuration} away
-                </Text>
-              </View>
-
-              <Text style={tw`text-lg font-bold text-black`}>
-                {new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "EGP",
-                }).format(price)}
-              </Text>
-            </TouchableOpacity>
-          );
-        }}
-      />
-    </>
+              {new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "EGP",
+              }).format(price)}
+            </Text>
+          </TouchableOpacity>
+        );
+      }}
+    />
   );
 }

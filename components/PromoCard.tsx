@@ -16,7 +16,7 @@ export default function PromoCard({ promo }: Props) {
   return (
     <View
       style={[
-        tw`w-85 rounded-3xl p-5 my-3 mx-2 overflow-hidden relative justify-between`,
+        tw`w-85 rounded-3xl p-5 my-3 mx-1 overflow-hidden relative justify-between`,
         {
           backgroundColor: theme.card.backgroundColor,
           borderColor: theme.card.borderColor,

@@ -328,7 +328,7 @@ export default function Register() {
               onPress={handleSubmit(onSubmit)}
               activeOpacity={0.4}
               style={[
-                tw`rounded-2xl h-14 items-center justify-center mb-8`,
+                tw`rounded-2xl h-14 items-center justify-center mb-8 shadow-md`,
                 isSubmitting
                   ? { backgroundColor: colors.textMuted }
                   : theme.card, 

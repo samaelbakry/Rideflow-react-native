@@ -6,11 +6,16 @@ import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import React, { useState } from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
+import { useThemeColors } from "@/hooks/use-theme-colors";
+import { createThemeStyles } from "@/constants/theme";
 
 export default function RatingDriver() {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const colors = useThemeColors();
+  const theme = createThemeStyles(colors);
 
   const ride_id = useAppSelector(selectedRideId);
   const driver = useAppSelector(selectedDriver);
@@ -22,16 +27,18 @@ export default function RatingDriver() {
       Alert.alert("Error", "Missing ride or driver details.");
       return;
     }
+
     if (rating === 0) {
       Alert.alert(
         "Rating Required",
-        "Please select a star rating before submitting.",
+        "Please select a star rating before submitting."
       );
       return;
     }
 
     try {
       setIsSubmitting(true);
+
       await createRideReview({
         ride_id,
         driver_id: driverId,
@@ -41,6 +48,7 @@ export default function RatingDriver() {
       });
 
       Alert.alert("Thank You!", "Your feedback helps improve the community.");
+
       setRating(0);
       setComment("");
     } catch (error) {
@@ -53,14 +61,26 @@ export default function RatingDriver() {
 
   return (
     <View
-      style={tw`p-6 bg-white rounded-3xl shadow-md w-full max-w-sm mx-auto`}
+      style={[
+        tw`p-6 rounded-3xl shadow-md w-full max-w-sm mx-auto border`,
+        theme.card,
+      ]}
     >
       <Text
-        style={tw`text-xl font-bold text-gray-900 text-center tracking-tight`}
+        style={[
+          tw`text-xl font-bold text-center tracking-tight`,
+          theme.text,
+        ]}
       >
         How was your ride?
       </Text>
-      <Text style={tw`text-sm text-gray-500 text-center mt-1 mb-5`}>
+
+      <Text
+        style={[
+          tw`text-sm text-center mt-1 mb-5`,
+          theme.caption,
+        ]}
+      >
         Your feedback keeps our community safe and reliable.
       </Text>
 
@@ -75,44 +95,65 @@ export default function RatingDriver() {
             <Ionicons
               name={rating >= star ? "star" : "star-outline"}
               size={38}
-              color={rating >= star ? "#eab308" : "#d1d5db"}
+              color={rating >= star ? "#EAB308" : colors.border}
             />
           </TouchableOpacity>
         ))}
       </View>
 
       <View
-        style={tw`bg-gray-50 border border-gray-200 rounded-2xl px-4 py-3 flex-row items-start mb-6 min-h-[100px]`}
+        style={[
+          tw`rounded-2xl px-4 py-3 flex-row items-start mb-6 min-h-[60px] border`,
+          theme.input,
+        ]}
       >
         <Ionicons
           name="chatbubble-ellipses-outline"
           size={20}
-          color="#9ca3af"
+          color={colors.textMuted}
           style={tw`mt-0.5`}
         />
 
         <BottomSheetTextInput
-          placeholder="Leave a comment about your experience (optional)..."
-          placeholderTextColor="#a1a1aa"
+          placeholder="Leave a comment ..."
+          placeholderTextColor={colors.textMuted}
           autoCapitalize="sentences"
           autoCorrect
           multiline
-          textAlignVertical="top"
           value={comment}
           onChangeText={setComment}
-          style={tw`flex-1 ml-3 text-gray-800 text-base`}
+          style={[
+            tw`flex-1 ml-3 text-base`,
+            {
+              color: colors.text,
+            },
+          ]}
         />
       </View>
 
       <TouchableOpacity
         onPress={handlePress}
         disabled={rating === 0 || isSubmitting}
-        style={tw`w-full py-4 rounded-2xl items-center justify-center shadow-sm 
-          ${rating === 0 || isSubmitting ? "bg-gray-100" : "bg-black active:opacity-90"}`}
+        style={[
+          tw`w-full py-4 rounded-2xl items-center justify-center`,
+          {
+            backgroundColor:
+              rating === 0 || isSubmitting
+                ? colors.surface
+                : colors.primary,
+          },
+        ]}
       >
         <Text
-          style={tw`font-semibold text-base 
-            ${rating === 0 || isSubmitting ? "text-gray-400" : "text-white"}`}
+          style={[
+            tw`font-semibold text-base`,
+            {
+              color:
+                rating === 0 || isSubmitting
+                  ? colors.textMuted
+                  : colors.onPrimary,
+            },
+          ]}
         >
           {isSubmitting ? "Submitting..." : "Submit Review"}
         </Text>

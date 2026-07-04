@@ -158,6 +158,10 @@ emptyState: {
   backgroundColor: colors.card,
   borderColor: colors.border,
 },
+selectedCard: {
+  borderColor: colors.primary,
+  borderWidth: 2,
+},
 });
 
 export const Fonts = Platform.select({

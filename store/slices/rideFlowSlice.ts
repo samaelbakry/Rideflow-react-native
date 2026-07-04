@@ -91,6 +91,31 @@ const RideFlowSlice = createSlice({
       state.destination = null;
       state.travelTimeInformation = null;
     },
+   goBackRideState: (state) => {
+    switch (state.rideStatus) {
+    case "selecting_car":
+      state.rideStatus = "idle";
+      state.destination = null;
+      break;
+
+    case "searching_drivers":
+      state.rideStatus = "selecting_car";
+      break;
+
+    case "driver_assigned":
+      state.rideStatus = "selecting_car";
+      break;
+
+    case "trip_started":
+      state.rideStatus = "driver_assigned";
+      break;
+
+    case "trip_ended":
+      state.rideStatus = "idle";
+      state.destination = null;
+      break;
+  }
+}
   },
 });
 
@@ -107,7 +132,8 @@ export const {
   startTrip,
   endTrip,
   startOver,
-  setPrice
+  setPrice,
+  goBackRideState
 } = RideFlowSlice.actions;
 
 export const selectOrigin = (state: RootState) => state.rideFlow.origin;
