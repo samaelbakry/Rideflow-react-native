@@ -68,77 +68,59 @@ export default function SearchBar() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-  <View style={tw`gap-3`}>
-    <View style={tw`relative`}>
-      <TextInput
-        value={rideDestination}
-        onChangeText={setRideDestination}
-        placeholder="Where from?"
-        placeholderTextColor={colors.textMuted}
-        style={[
-          tw`p-3 pr-10 rounded-2xl shadow-md border`,
-          theme.input,
-        ]}
-      />
-
-      {loading && (
-        <View style={tw`absolute right-9 top-3`}>
-          <ActivityIndicator
-            size="small"
-            color={colors.primary}
+      <View style={tw`gap-3`}>
+        <View style={tw`relative`}>
+          <TextInput
+            value={rideDestination}
+            onChangeText={setRideDestination}
+            placeholder="Where from?"
+            placeholderTextColor={colors.textMuted}
+            style={[tw`p-3 pr-10 rounded-2xl shadow-md border`, theme.input]}
           />
+
+          {loading && (
+            <View style={tw`absolute right-9 top-3`}>
+              <ActivityIndicator size="small" color={colors.primary} />
+            </View>
+          )}
+
+          {rideDestination.length > 0 && (
+            <TouchableOpacity
+              onPress={handleClear}
+              style={tw`absolute right-3 top-3`}
+            >
+              <Ionicons name="close-circle" size={20} color={colors.icon} />
+            </TouchableOpacity>
+          )}
         </View>
-      )}
 
-      {rideDestination.length > 0 && (
-        <TouchableOpacity
-          onPress={handleClear}
-          style={tw`absolute right-3 top-3`}
-        >
-          <Ionicons
-            name="close-circle"
-            size={20}
-            color={colors.icon}
-          />
-        </TouchableOpacity>
-      )}
-    </View>
+        <FlatList
+          data={results}
+          keyExtractor={(item, index) => index.toString()}
+          keyboardShouldPersistTaps="handled"
+          style={[tw`rounded-2xl mb-2`, theme.card]}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(
+                  setOrigin({
+                    description: item.display_name,
+                    latitude: parseFloat(item.lat),
+                    longitude: parseFloat(item.lon),
+                  }),
+                  setDestination(null),
+                );
 
-    <FlatList
-      data={results}
-      keyExtractor={(item, index) => index.toString()}
-      keyboardShouldPersistTaps="handled"
-      style={[
-        tw`rounded-2xl mb-2`,
-        theme.card,
-      ]}
-      renderItem={({ item }) => (
-        <TouchableOpacity
-          onPress={() => {
-            dispatch(
-              setOrigin({
-                description: item.display_name,
-                latitude: parseFloat(item.lat),
-                longitude: parseFloat(item.lon),
-              }),
-              setDestination(null)
-            );
-
-            setRideDestination(item.display_name);
-            setResults([]);
-          }}
-          style={[
-            tw`p-3 border-b mb-3`,
-            theme.listItem,
-          ]}
-        >
-          <Text style={theme.text}>
-            {item.display_name}
-          </Text>
-        </TouchableOpacity>
-      )}
-    />
-  </View>
-</TouchableWithoutFeedback>
+                setRideDestination(item.display_name);
+                setResults([]);
+              }}
+              style={[tw`p-3 border-b mb-3`, theme.listItem]}
+            >
+              <Text style={theme.text}>{item.display_name}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }

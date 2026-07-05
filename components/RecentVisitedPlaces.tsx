@@ -1,8 +1,11 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Button, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { selectUser } from "@/store/slices/authSlice";
 import { useSelector } from "react-redux";
-import { getRecentPlace } from "@/services/recentRides";
+import {
+  clearRecentPlacesHistory,
+  getRecentPlace,
+} from "@/services/recentRides";
 import { RecentPlace } from "@/types/PropsTypes";
 import tw from "twrnc";
 import { Ionicons } from "@expo/vector-icons";
@@ -18,7 +21,7 @@ export default function RecentVisitedPlaces() {
 
   useEffect(() => {
     fetchRecentPlaces();
-  }, []);
+  }, [userId]);
 
   async function fetchRecentPlaces() {
     if (!userId) return;
@@ -26,52 +29,65 @@ export default function RecentVisitedPlaces() {
     const allVisitedPlaces = await getRecentPlace(userId);
     setPlaces(allVisitedPlaces);
   }
+  async function handleClear() {
+    if (!userId) return;
+    
+     Alert.alert("clear", "Are you sure you want to clear history?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Clear",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await clearRecentPlacesHistory(userId!)
+            setPlaces([])
+          } catch (error: any) {
+            Alert.alert("Error", error.message);
+          }
+        },
+      },
+    ]);
+  }
 
   return (
     <View style={tw`mt-6`}>
-      <Text style={[tw`text-lg font-bold mb-3`, theme.text]}>
-        Recent Places
-      </Text>
+      <View style={tw`flex-row justify-between items-center`}>
+        <Text style={[tw`text-lg font-bold mb-3`, theme.text]}>
+          Recent Places
+        </Text>
+        {places.length > 1 && (
+          <View style={[tw`rounded-2xl shadow px-2 mb-3`, theme.card]}>
+            <Button
+              title="clear"
+              color={colors.primary}
+              onPress={handleClear}
+            />
+          </View>
+        )}
+      </View>
 
       {places.length === 0 ? (
-        <View
-          style={[
-            tw`rounded-2xl p-5 items-center`,
-            theme.card,
-          ]}
-        >
-          <Ionicons
-            name="time-outline"
-            size={32}
-            color={colors.icon}
-          />
+        <View style={[tw`rounded-2xl p-5 items-center`, theme.card]}>
+          <Ionicons name="time-outline" size={32} color={colors.icon} />
 
-          <Text
-            style={[
-              tw`mt-3 text-base font-semibold`,
-              theme.text,
-            ]}
-          >
+          <Text style={[tw`mt-3 text-base font-semibold`, theme.text]}>
             No recent places
           </Text>
 
-          <Text
-            style={[
-              tw`mt-1 text-center text-sm`,
-              theme.secondaryText,
-            ]}
-          >
+          <Text style={[tw`mt-1 text-center text-sm`, theme.secondaryText]}>
             Your recently visited destinations will appear here.
           </Text>
         </View>
       ) : (
         <FlatList
           data={places}
-          keyExtractor={(item) => item.title}
           scrollEnabled={false}
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={[tw`flex-row items-center py-3 rounded-xl px-2 mb-3 shadow-md` , theme.card]}
+              style={[
+                tw`flex-row items-center py-3 rounded-xl px-2 mb-3 shadow-md`,
+                theme.card,
+              ]}
             >
               <View
                 style={[
@@ -79,27 +95,17 @@ export default function RecentVisitedPlaces() {
                   theme.avatar,
                 ]}
               >
-                <Ionicons
-                  name="time-outline"
-                  size={20}
-                  color={colors.icon}
-                />
+                <Ionicons name="time-outline" size={20} color={colors.icon} />
               </View>
 
               <View style={tw`flex-1`}>
-                <Text
-                  numberOfLines={1}
-                  style={[tw`font-semibold`, theme.text]}
-                >
+                <Text numberOfLines={1} style={[tw`font-semibold`, theme.text]}>
                   {item.title}
                 </Text>
 
                 <Text
                   numberOfLines={1}
-                  style={[
-                    tw`text-xs mt-1`,
-                    theme.secondaryText,
-                  ]}
+                  style={[tw`text-xs mt-1`, theme.secondaryText]}
                 >
                   {item.address}
                 </Text>

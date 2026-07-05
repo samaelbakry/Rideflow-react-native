@@ -59,8 +59,7 @@ export default function DriverList() {
 
   const driversData = drivers.filter(
     (driver) =>
-      cars.find((car) => car.id === selectedCarType)?.title ===
-      driver.ride_type,
+      cars.find((car) => car.id === selectedCarType)?.title === driver.ride_type,
   );
 
   return (

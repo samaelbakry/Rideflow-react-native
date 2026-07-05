@@ -1,16 +1,15 @@
 import { getDrivers } from "@/services/rideData";
-import { selectedDriver, selectOrigin } from "@/store/slices/rideFlowSlice";
+import { selectOrigin } from "@/store/slices/rideFlowSlice";
 import { useAppSelector } from "@/store/store";
 import { Driver } from "@/types/rideTypes";
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import tw from "twrnc";
 
 export default function MiniMapPreview() {
   const origin = useAppSelector(selectOrigin);
   const [drivers, setDrivers] = useState<Driver[]>([]);
-  const driver = useAppSelector(selectedDriver);
 
   useEffect(() => {
     async function loadCars() {

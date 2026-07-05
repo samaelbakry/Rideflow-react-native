@@ -18,8 +18,6 @@ export default function DestinationRoutePolyline({routeCoords}:{routeCoords:any}
               lineCap="round"
               lineJoin="round"
             />
-
-            
     </>
   )
 }

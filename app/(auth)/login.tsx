@@ -65,7 +65,7 @@ export default function Login() {
       style={tw`flex-1`}
     >
       <View style={tw`flex-1 px-6 justify-center max-w-md mx-auto w-full`}>
-        {/* Logo */}
+        
         <View style={tw`items-center mb-12`}>
           <Logo />
 
@@ -250,46 +250,6 @@ export default function Login() {
             </Text>
           )}
         </TouchableOpacity>
-
-        <View style={tw`flex-row items-center mb-8`}>
-          <View style={[tw`flex-1 h-px`, theme.divider]} />
-
-          <Text
-            style={[
-              tw`mx-4 text-xs tracking-wider font-semibold`,
-              theme.mutedText,
-            ]}
-          >
-            OR CONTINUE WITH
-          </Text>
-
-          <View style={[tw`flex-1 h-px`, theme.divider]} />
-        </View>
-
-        <View style={tw`flex-row justify-center mb-10`}>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={[
-              tw`w-full h-14 rounded-2xl border items-center justify-center flex-row gap-3`,
-              theme.card,
-            ]}
-          >
-            <Ionicons
-              name="logo-google"
-              size={22}
-              color={colors.icon}
-            />
-
-            <Text
-              style={[
-                tw`font-semibold text-base`,
-                theme.text,
-              ]}
-            >
-              Google
-            </Text>
-          </TouchableOpacity>
-        </View>
 
         <View style={tw`flex-row justify-center items-center`}>
           <Text style={theme.secondaryText}>

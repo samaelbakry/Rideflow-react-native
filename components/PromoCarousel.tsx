@@ -1,6 +1,6 @@
 import { getPromos } from "@/services/recentRides";
 import { Promo } from "@/types/PropsTypes";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import PromoCard from "./PromoCard";
 

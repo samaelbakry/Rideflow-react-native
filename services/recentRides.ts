@@ -20,3 +20,11 @@ export async function getPromos() {
 
   return data;
 }
+
+export async function clearRecentPlacesHistory(userId:string) {
+  const {error} = await supabase
+  .from("recent_places")
+  .delete()
+  .eq("user_id" , userId)
+   if (error) throw error;
+}

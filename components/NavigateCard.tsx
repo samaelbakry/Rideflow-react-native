@@ -112,7 +112,7 @@ export default function NavigateCard() {
 
             <FlatList
               data={results}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(index) => index.toString()}
               keyboardShouldPersistTaps="handled"
               style={[
                 tw`rounded-xl`,
