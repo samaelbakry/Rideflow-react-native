@@ -36,6 +36,6 @@ export default function AuthProvider({
   }, [initialized, user, router]);
 
   if (!initialized) return null;
-
-  return <> {children} </>;
+  
+  return <>{children}</>;
 }

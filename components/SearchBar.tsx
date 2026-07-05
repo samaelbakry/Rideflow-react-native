@@ -20,6 +20,10 @@ import {
   View,
 } from "react-native";
 import tw from "twrnc";
+import RecentVisitedPlaces from "./RecentVisitedPlaces";
+import Navoptions from "./Navoptions";
+import PromoCarousel from "./PromoCarousel";
+import MiniMapPreview from "./MiniMapPreview";
 
 export default function SearchBar() {
   const [rideDestination, setRideDestination] = useState("");
@@ -96,9 +100,24 @@ export default function SearchBar() {
 
         <FlatList
           data={results}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(index) => index.toString()}
           keyboardShouldPersistTaps="handled"
-          style={[tw`rounded-2xl mb-2`, theme.card]}
+          style={[
+            tw`rounded-2xl mb-2`,
+            theme.card,
+            {
+              backgroundColor: "transparent",
+            },
+          ]}
+          ListFooterComponentStyle={tw`pt-4 pb-8`}
+          ListFooterComponent={
+            <>
+              <Navoptions />
+              <RecentVisitedPlaces />
+              <PromoCarousel />
+              <MiniMapPreview />
+            </>
+          }
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => {
