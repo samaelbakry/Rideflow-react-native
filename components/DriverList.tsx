@@ -1,12 +1,14 @@
+import { createThemeStyles } from "@/constants/theme";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import { supabase } from "@/lib/supabase";
 import { createRide, getCars, getDrivers } from "@/services/rideData";
 import {
-  selectedCar,
-  selectPrice,
-  selectOrigin,
   selectDestination,
-  selectOriginDescription,
   selectDestinationDescription,
+  selectedCar,
+  selectOrigin,
+  selectOriginDescription,
+  selectPrice,
   selectTravelTimeInformation,
   setRideId,
   setSelectedDriver,
@@ -14,10 +16,8 @@ import {
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Car, Driver } from "@/types/rideTypes";
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import { useThemeColors } from "@/hooks/use-theme-colors";
-import { createThemeStyles } from "@/constants/theme";
 
 export default function DriverList() {
   const dispatch = useAppDispatch();
@@ -59,16 +59,15 @@ export default function DriverList() {
 
   const driversData = drivers.filter(
     (driver) =>
-      cars.find((car) => car.id === selectedCarType)?.title === driver.ride_type,
+      cars.find((car) => car.id === selectedCarType)?.title ===
+      driver.ride_type,
   );
 
   return (
-    <FlatList
-      data={driversData}
-      keyExtractor={(item) => item.id}
-      contentContainerStyle={tw`p-4`}
-      renderItem={({ item }) => (
+    <View style={tw`p-4`}>
+      {driversData.map((item) => (
         <TouchableOpacity
+          key={item.id}
           onPress={async () => {
             if (!item.is_available) return;
 
@@ -109,21 +108,11 @@ export default function DriverList() {
         >
           <View style={tw`flex-row justify-between items-start`}>
             <View>
-              <Text
-                style={[
-                  tw`text-lg font-bold`,
-                  theme.text,
-                ]}
-              >
+              <Text style={[tw`text-lg font-bold`, theme.text]}>
                 {item.name}
               </Text>
 
-              <Text
-                style={[
-                  tw`text-sm mt-0.5`,
-                  theme.secondaryText,
-                ]}
-              >
+              <Text style={[tw`text-sm mt-0.5`, theme.secondaryText]}>
                 {item.ride_type}
               </Text>
             </View>
@@ -136,14 +125,7 @@ export default function DriverList() {
                 },
               ]}
             >
-              <Text
-                style={{
-                  color: colors.warning,
-                }}
-              >
-                ⭐
-              </Text>
-
+              <Text style={{ color: colors.warning }}>⭐</Text>
               <Text
                 style={[
                   tw`font-semibold text-sm ml-1`,
@@ -157,12 +139,7 @@ export default function DriverList() {
             </View>
           </View>
 
-          <View
-            style={[
-              tw`h-px my-3`,
-              theme.divider,
-            ]}
-          />
+          <View style={[tw`h-px my-3`, theme.divider]} />
 
           <View style={tw`flex-row justify-between items-center`}>
             <View style={tw`flex-row items-center flex-1`}>
@@ -176,21 +153,11 @@ export default function DriverList() {
               </View>
 
               <View>
-                <Text
-                  style={[
-                    tw`text-sm font-medium`,
-                    theme.text,
-                  ]}
-                >
+                <Text style={[tw`text-sm font-medium`, theme.text]}>
                   {item.car_model}
                 </Text>
 
-                <Text
-                  style={[
-                    tw`text-xs mt-0.5`,
-                    theme.secondaryText,
-                  ]}
-                >
+                <Text style={[tw`text-xs mt-0.5`, theme.secondaryText]}>
                   {item.plate_number}
                 </Text>
               </View>
@@ -210,20 +177,16 @@ export default function DriverList() {
                 style={[
                   tw`text-xs font-bold`,
                   {
-                    color: item.is_available
-                      ? colors.success
-                      : colors.danger,
+                    color: item.is_available ? colors.success : colors.danger,
                   },
                 ]}
               >
-                {item.is_available
-                  ? "● Available"
-                  : "● Unavailable"}
+                {item.is_available ? "● Available" : "● Unavailable"}
               </Text>
             </View>
           </View>
         </TouchableOpacity>
-      )}
-    />
+      ))}
+    </View>
   );
 }

@@ -7,6 +7,10 @@ import SearchBar from "@/components/SearchBar";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { ScrollView } from "react-native-gesture-handler";
 import tw from "twrnc";
+import Navoptions from "@/components/Navoptions";
+import RecentVisitedPlaces from "@/components/RecentVisitedPlaces";
+import PromoCarousel from "@/components/PromoCarousel";
+import MiniMapPreview from "@/components/MiniMapPreview";
 
 export default function HomeScreen() {
   const colors = useThemeColors();
@@ -22,6 +26,10 @@ export default function HomeScreen() {
               <GetCurrentLocation />
             </View>
             <SearchBar />
+              <Navoptions />
+              <RecentVisitedPlaces />
+              <PromoCarousel />
+              <MiniMapPreview />
           </View>
         </TouchableWithoutFeedback>
       </Container>

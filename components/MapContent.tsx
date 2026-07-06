@@ -31,6 +31,7 @@ export default function MapContent() {
   const userId = useAppSelector(selectUser)?.id;
   const [routeCoords, setRouteCoords] = useState<LatLng[]>([]);
   const [carPosition, setCarPosition] = useState<LatLng | null>(null);
+
   const dispatch = useAppDispatch();
   const rideStatus = useAppSelector(rideState);
   const driver = useAppSelector(selectedDriver);
@@ -140,7 +141,6 @@ export default function MapContent() {
 
         return;
       }
-
       setCarPosition(routeCoords[i]);
       i++;
     }, 200);

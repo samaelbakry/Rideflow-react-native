@@ -1,3 +1,5 @@
+import { createThemeStyles } from "@/constants/theme";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import { getDrivers } from "@/services/rideData";
 import { selectOrigin } from "@/store/slices/rideFlowSlice";
 import { useAppSelector } from "@/store/store";
@@ -11,6 +13,9 @@ export default function MiniMapPreview() {
   const origin = useAppSelector(selectOrigin);
   const [drivers, setDrivers] = useState<Driver[]>([]);
 
+  const colors = useThemeColors();
+  const theme = createThemeStyles(colors);
+
   useEffect(() => {
     async function loadCars() {
       const data = await getDrivers();
@@ -22,7 +27,7 @@ export default function MiniMapPreview() {
   return (
     <View style={tw`w-full`}>
       <Text
-        style={tw`text-gray-400 font-bold mb-3 uppercase text-xs tracking-wider`}
+        style={[tw`text-gray-400 font-bold mb-3 px-2 uppercase text-xs tracking-wider`, theme.text]}
       >
         Drivers Around You
       </Text>

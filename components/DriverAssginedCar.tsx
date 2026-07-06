@@ -27,7 +27,6 @@ export default function DriverAssginedCar() {
   async function handlePress() {
     try {
       if (!rideId) return;
-
       await updateRideStatus(rideId, "trip_started");
       dispatch(startTrip());
     } catch (error) {

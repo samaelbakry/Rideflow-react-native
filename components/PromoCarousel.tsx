@@ -1,11 +1,17 @@
 import { getPromos } from "@/services/recentRides";
 import { Promo } from "@/types/PropsTypes";
 import React, { useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, Text } from "react-native";
 import PromoCard from "./PromoCard";
+import tw from "twrnc"
+import { useThemeColors } from "@/hooks/use-theme-colors";
+import { createThemeStyles } from "@/constants/theme";
 
 export default function PromoCarousel() {
   const [promos, setPromos] = useState<Promo[]>([]);
+
+   const colors = useThemeColors();
+  const theme = createThemeStyles(colors);
 
   useEffect(() => {
     fetchPromos();
@@ -20,32 +26,17 @@ export default function PromoCarousel() {
     }
   }
 
-  // const flatListRef = useRef<FlatList>(null);
-  // const indexRef = useRef(0);
-
-  // useEffect(() => {
-  //   if (promos.length === 0) return;
-
-  //   const interval = setInterval(() => {
-  //     indexRef.current = (indexRef.current + 1) % promos.length;
-
-  //     flatListRef.current?.scrollToIndex({
-  //       index: indexRef.current,
-  //       animated: true,
-  //     });
-  //   }, 2000);
-
-  //   return () => clearInterval(interval);
-  // }, [promos]);
   return (
-    <FlatList
-      //  ref={flatListRef}
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      data={promos}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <PromoCard promo={item} />}
-    />
+    <>
+    <Text style={[tw`text-gray-400 font-bold px-2 mt-2 uppercase text-xs tracking-wider`, theme.text]}>Promos</Text>
+      <FlatList
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        data={promos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <PromoCard promo={item} />}
+      />
+    </>
   );
 }

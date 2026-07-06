@@ -1,3 +1,5 @@
+import { createThemeStyles } from "@/constants/theme";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import {
   rideState,
   selectDestinationDescription,
@@ -9,13 +11,11 @@ import {
 } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Ionicons } from "@expo/vector-icons";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
 import RatingDriver from "./RatingDriver";
-import { useThemeColors } from "@/hooks/use-theme-colors";
-import { createThemeStyles } from "@/constants/theme";
 
 export default function TripStarted() {
   const dispatch = useAppDispatch();

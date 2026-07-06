@@ -98,28 +98,16 @@ export default function SearchBar() {
           )}
         </View>
 
-        <FlatList
-          data={results}
-          keyExtractor={(index) => index.toString()}
-          keyboardShouldPersistTaps="handled"
+        <View
           style={[
-            tw`rounded-2xl mb-2`,
+            tw`rounded-2xl mb-2 flex-1`,
             theme.card,
-            {
-              backgroundColor: "transparent",
-            },
+            { backgroundColor: "transparent" },
           ]}
-          ListFooterComponentStyle={tw`pt-4 pb-8`}
-          ListFooterComponent={
-            <>
-              <Navoptions />
-              <RecentVisitedPlaces />
-              <PromoCarousel />
-              <MiniMapPreview />
-            </>
-          }
-          renderItem={({ item }) => (
+        >
+          {results.map((item, index) => (
             <TouchableOpacity
+              key={item.place_id || item.id || index.toString()}
               onPress={() => {
                 dispatch(
                   setOrigin({
@@ -127,8 +115,8 @@ export default function SearchBar() {
                     latitude: parseFloat(item.lat),
                     longitude: parseFloat(item.lon),
                   }),
-                  setDestination(null),
                 );
+                dispatch(setDestination(null));
 
                 setRideDestination(item.display_name);
                 setResults([]);
@@ -137,8 +125,8 @@ export default function SearchBar() {
             >
               <Text style={theme.text}>{item.display_name}</Text>
             </TouchableOpacity>
-          )}
-        />
+          ))}
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );

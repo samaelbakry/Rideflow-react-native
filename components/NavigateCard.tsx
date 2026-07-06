@@ -1,3 +1,5 @@
+import { createThemeStyles } from "@/constants/theme";
+import { useThemeColors } from "@/hooks/use-theme-colors";
 import { getSearchvalue } from "@/services/searchAutocomplete-service";
 import {
   rideState,
@@ -9,21 +11,18 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  FlatList,
   Keyboard,
   Text,
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
+  View
 } from "react-native";
 import tw from "twrnc";
+import DriverAssginedCar from "./DriverAssginedCar";
 import DriverCard from "./DriverCard";
 import DriverList from "./DriverList";
-import DriverAssginedCar from "./DriverAssginedCar";
 import TripStarted from "./TripStarted";
-import { useThemeColors } from "@/hooks/use-theme-colors";
-import { createThemeStyles } from "@/constants/theme";
 
 export default function NavigateCard() {
   const [rideDestination, setRideDestination] = useState("");
@@ -70,10 +69,7 @@ export default function NavigateCard() {
   return (
     <>
       {rideStatus === "idle" && (
-        <TouchableWithoutFeedback
-          onPress={Keyboard.dismiss}
-          accessible={false}
-        >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <View style={tw`gap-3 m-4`}>
             <View style={tw`relative`}>
               <TextInput
@@ -81,18 +77,12 @@ export default function NavigateCard() {
                 onChangeText={setRideDestination}
                 placeholder="Where to..."
                 placeholderTextColor={colors.textMuted}
-                style={[
-                  tw`p-3 pr-10 rounded-xl`,
-                  theme.input,
-                ]}
+                style={[tw`p-3 pr-10 rounded-xl`, theme.input]}
               />
 
               {loading && (
                 <View style={tw`absolute right-9 top-3`}>
-                  <ActivityIndicator
-                    size="small"
-                    color={colors.primary}
-                  />
+                  <ActivityIndicator size="small" color={colors.primary} />
                 </View>
               )}
 
@@ -101,32 +91,22 @@ export default function NavigateCard() {
                   onPress={handleClear}
                   style={tw`absolute right-3 top-3`}
                 >
-                  <Ionicons
-                    name="close-circle"
-                    size={20}
-                    color={colors.icon}
-                  />
+                  <Ionicons name="close-circle" size={20} color={colors.icon} />
                 </TouchableOpacity>
               )}
             </View>
 
-            <FlatList
-              data={results}
-              keyExtractor={(index) => index.toString()}
-              keyboardShouldPersistTaps="handled"
-              style={[
-                tw`rounded-xl`,
-                theme.card,
-              ]}
-              renderItem={({ item }) => (
+            <View style={[tw`rounded-xl`, theme.card]}>
+              {results.map((item, index) => (
                 <TouchableOpacity
+                  key={item.place_id || index.toString()}
                   onPress={() => {
                     dispatch(
                       setDestination({
                         description: item.display_name,
                         latitude: parseFloat(item.lat),
                         longitude: parseFloat(item.lon),
-                      })
+                      }),
                     );
 
                     setRideDestination(item.display_name);
@@ -135,14 +115,13 @@ export default function NavigateCard() {
                   style={[
                     tw`p-3 border-b`,
                     theme.border,
+                    index === results.length - 1 && { borderBottomWidth: 0 },
                   ]}
                 >
-                  <Text style={theme.text}>
-                    {item.display_name}
-                  </Text>
+                  <Text style={theme.text}>{item.display_name}</Text>
                 </TouchableOpacity>
-              )}
-            />
+              ))}
+            </View>
           </View>
         </TouchableWithoutFeedback>
       )}
@@ -153,8 +132,9 @@ export default function NavigateCard() {
 
       {rideStatus === "driver_assigned" && <DriverAssginedCar />}
 
-      {(rideStatus === "trip_started" ||
-        rideStatus === "trip_ended") && <TripStarted />}
+      {(rideStatus === "trip_started" || rideStatus === "trip_ended") && (
+        <TripStarted />
+      )}
     </>
   );
 }
