@@ -11,69 +11,75 @@ import { useRouter } from "expo-router";
 
 export default function Navoptions() {
   const origin = useAppSelector(selectOrigin);
-
   const colors = useThemeColors();
   const theme = createThemeStyles(colors);
-  const navigate = useRouter()
+  const navigate = useRouter();
+
+  const handlePress = () => {
+    if (origin) {
+      navigate.push("/maps");
+    }
+  };
 
   return (
     <TouchableOpacity
-      activeOpacity={0.85}
+      activeOpacity={origin ? 0.8 : 1}
+      disabled={!origin}
+      onPress={handlePress}
       style={[
-        tw`rounded-2xl p-3 shadow border w-44`,
+        tw`rounded-3xl p-5 border w-44 items-center justify-between shadow-sm`,
         theme.card,
+        !origin && tw`opacity-60`, 
+        origin ? { borderColor: colors.success } : { borderColor: colors.border },
       ]}
     >
-      <Image
-        source={car}
-        style={{
-          width: 120,
-          height: 70,
-          resizeMode: "contain",
-          alignSelf: "center",
-        }}
-      />
+      <View style={tw`w-full flex-row justify-end mb-1`}>
+        <View 
+          style={[
+            tw`px-2 py-0.5 rounded-full items-center justify-center`,
+            { backgroundColor: origin ? `${colors.success}15` : `${colors.primary}15` }
+          ]}
+        >
+          <Text style={[tw`text-[10px] font-bold`, { color: origin ? colors.success : colors.primary }]}>
+            {origin ? "READY" : "SET ORIGIN"}
+          </Text>
+        </View>
+      </View>
 
-      <Text
+      <View style={tw`h-20 justify-center items-center mb-2`}>
+        <Image
+          source={car}
+          style={{
+            width: 130,
+            height: 75,
+            resizeMode: "contain",
+          }}
+        />
+      </View>
+
+      <View style={tw`items-center mb-4`}>
+        <Text style={[tw`text-base font-bold tracking-tight`, theme.text]}>
+          Get a Ride
+        </Text>
+        <Text style={[tw`text-center text-xs mt-0.5 font-medium`, theme.secondaryText]}>
+          Travel safely anytime
+        </Text>
+      </View>
+
+      <View
         style={[
-          tw`text-center text-xs mt-2`,
-          theme.secondaryText,
+          tw`w-10 h-10 rounded-full items-center justify-center shadow-sm`,
+          {
+            backgroundColor: origin ? colors.success : colors.primary,
+          },
         ]}
       >
-        Get ride now
-      </Text>
-
-      <View style={tw`mt-3 items-center`}>
-       
-          <TouchableOpacity
-            disabled={!origin}
-            onPress={() => navigate.push("/maps")}
-            style={[
-              tw`px-4 py-2 rounded-full flex-row items-center gap-1`,
-              {
-                backgroundColor: origin
-                  ? colors.success
-                  : colors.primary,
-              },
-            ]}
-          >
-            <Text
-              style={[
-                tw`text-xs font-semibold`,
-                { color: colors.onPrimary },
-              ]}
-            >
-              Start
-            </Text>
-
-            <Ionicons
-              name="arrow-forward"
-              size={16}
-              color={colors.onPrimary}
-            />
-          </TouchableOpacity>
-        </View>
-      
+        <Ionicons
+          name={origin ? "arrow-forward" : "pin-outline"}
+          size={18}
+          color={colors.onPrimary}
+        />
+      </View>
     </TouchableOpacity>
   );
 }

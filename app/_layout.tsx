@@ -2,6 +2,7 @@ import AnimatedSplash from "@/components/AnimatedSplash";
 import AppNavigator from "@/providers/AppNavigator";
 import AuthProvider from "@/providers/AuthProvider";
 import ReduxProvider from "@/providers/ReduxProvider";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -29,16 +30,18 @@ export default function RootLayout() {
   if (!ready) return null;
 
   return (
-    <ReduxProvider>
-      {showIntro ? (
-        <AnimatedSplash onFinish={() => setShowIntro(false)} />
-      ) : (
-        <AuthProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <AppNavigator />
-          </GestureHandlerRootView>
-        </AuthProvider>
-      )}
-    </ReduxProvider>
+   <ReduxProvider>
+  {showIntro ? (
+    <AnimatedSplash onFinish={() => setShowIntro(false)} />
+  ) : (
+    <AuthProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <BottomSheetModalProvider>
+          <AppNavigator />
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
+    </AuthProvider>
+  )}
+</ReduxProvider>
   );
 }

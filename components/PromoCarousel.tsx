@@ -10,7 +10,7 @@ import { createThemeStyles } from "@/constants/theme";
 export default function PromoCarousel() {
   const [promos, setPromos] = useState<Promo[]>([]);
 
-   const colors = useThemeColors();
+  const colors = useThemeColors();
   const theme = createThemeStyles(colors);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function PromoCarousel() {
 
   return (
     <>
-    <Text style={[tw`text-gray-400 font-bold px-2 mt-2 uppercase text-xs tracking-wider`, theme.text]}>Promos</Text>
+    <Text style={[tw`text-gray-400 font-bold px-2 mt-2 uppercase text-xs tracking-wider`, theme.text]}>Promotions</Text>
       <FlatList
         horizontal
         pagingEnabled

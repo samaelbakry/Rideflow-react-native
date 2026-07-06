@@ -11,6 +11,7 @@ import Navoptions from "@/components/Navoptions";
 import RecentVisitedPlaces from "@/components/RecentVisitedPlaces";
 import PromoCarousel from "@/components/PromoCarousel";
 import MiniMapPreview from "@/components/MiniMapPreview";
+import FavoritePlaces from "@/components/FavoritePlaces";
 
 export default function HomeScreen() {
   const colors = useThemeColors();
@@ -28,6 +29,7 @@ export default function HomeScreen() {
             <SearchBar />
               <Navoptions />
               <RecentVisitedPlaces />
+              <FavoritePlaces/>
               <PromoCarousel />
               <MiniMapPreview />
           </View>

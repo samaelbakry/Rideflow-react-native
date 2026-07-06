@@ -11,7 +11,7 @@ type RideStatus =
 
 type RideFlowState = {
   rideStatus: RideStatus;
-  rideId:string | null
+  rideId: string | null;
   origin: LatLng | null;
   originDescription: string;
   destination: LatLng | null;
@@ -21,11 +21,13 @@ type RideFlowState = {
   selectedDriver: any | null;
   driverArrived: boolean;
   tripEndedAt: string | null;
-  price:number
+  price: number;
+  lastDestination: LatLng | null;
+  lastDestinationDescription: string;
 };
 
 const initialState: RideFlowState = {
-  rideId:null,
+  rideId: null,
   origin: null,
   destination: null,
   originDescription: "",
@@ -35,16 +37,18 @@ const initialState: RideFlowState = {
   selectedDriver: null,
   driverArrived: false,
   rideStatus: "idle",
-  tripEndedAt:null,
-  price:0
+  tripEndedAt: null,
+  price: 0,
+  lastDestination: null,
+  lastDestinationDescription: "",
 };
 
 const RideFlowSlice = createSlice({
   name: "rideFlow",
   initialState,
   reducers: {
-    setRideId:(state , action)=>{
-      state.rideId = action.payload
+    setRideId: (state, action) => {
+      state.rideId = action.payload;
     },
     setOrigin: (state, action) => {
       state.origin = action.payload;
@@ -68,7 +72,7 @@ const RideFlowSlice = createSlice({
       state.rideStatus = "driver_assigned";
     },
     setPrice: (state, action) => {
-    state.price = action.payload;
+      state.price = action.payload;
     },
     startTrip: (state) => {
       state.rideStatus = "trip_started";
@@ -79,43 +83,44 @@ const RideFlowSlice = createSlice({
     endTrip: (state) => {
       state.rideStatus = "trip_ended";
       state.tripEndedAt = new Date().toISOString();
+      state.lastDestination = state.destination;
+      state.lastDestinationDescription = state.destinationDescription;
     },
     startOver: (state) => {
       state.rideStatus = "idle";
       state.driverArrived = false;
-
-      state.rideId = null
+      state.rideId = null;
       state.selectedDriver = null;
       state.selectedCar = null;
       state.origin = null;
       state.destination = null;
       state.travelTimeInformation = null;
     },
-   goBackRideState: (state) => {
-    switch (state.rideStatus) {
-    case "selecting_car":
-      state.rideStatus = "idle";
-      state.destination = null;
-      break;
+    goBackRideState: (state) => {
+      switch (state.rideStatus) {
+        case "selecting_car":
+          state.rideStatus = "idle";
+          state.destination = null;
+          break;
 
-    case "searching_drivers":
-      state.rideStatus = "selecting_car";
-      break;
+        case "searching_drivers":
+          state.rideStatus = "selecting_car";
+          break;
 
-    case "driver_assigned":
-      state.rideStatus = "selecting_car";
-      break;
+        case "driver_assigned":
+          state.rideStatus = "selecting_car";
+          break;
 
-    case "trip_started":
-      state.rideStatus = "driver_assigned";
-      break;
+        case "trip_started":
+          state.rideStatus = "driver_assigned";
+          break;
 
-    case "trip_ended":
-      state.rideStatus = "idle";
-      state.destination = null;
-      break;
-  }
-}
+        case "trip_ended":
+          state.rideStatus = "idle";
+          state.destination = null;
+          break;
+      }
+    },
   },
 });
 
@@ -133,23 +138,33 @@ export const {
   endTrip,
   startOver,
   setPrice,
-  goBackRideState
+  goBackRideState,
 } = RideFlowSlice.actions;
 
 export const selectOrigin = (state: RootState) => state.rideFlow.origin;
-export const selectOriginDescription = (state: RootState) =>state.rideFlow.originDescription;
+export const selectOriginDescription = (state: RootState) =>
+  state.rideFlow.originDescription;
 
-export const selectDestination = (state: RootState) =>state.rideFlow.destination;
-export const selectDestinationDescription = (state: RootState) =>state.rideFlow.destinationDescription;
+export const selectDestination = (state: RootState) =>
+  state.rideFlow.destination;
+export const selectDestinationDescription = (state: RootState) =>
+  state.rideFlow.destinationDescription;
+export const selectLastDestinationDescription = (state: RootState) =>
+  state.rideFlow.lastDestinationDescription;
+export const selectLastDestination = (state: RootState) =>
+  state.rideFlow.lastDestination;
 
 export const rideState = (state: RootState) => state.rideFlow.rideStatus;
 export const selectedRideId = (state: RootState) => state.rideFlow.rideId;
 export const selectPrice = (state: RootState) => state.rideFlow.price;
 
 export const selectedCar = (state: RootState) => state.rideFlow.selectedCar;
-export const selectedDriver = (state: RootState) =>state.rideFlow.selectedDriver;
+export const selectedDriver = (state: RootState) =>
+  state.rideFlow.selectedDriver;
 
 export const driverArrived = (state: RootState) => state.rideFlow.driverArrived;
-export const selectTripEndedAt = (state: RootState) => state.rideFlow.tripEndedAt;
+export const selectTripEndedAt = (state: RootState) =>
+  state.rideFlow.tripEndedAt;
 
-export const selectTravelTimeInformation = (state: RootState) => state.rideFlow.travelTimeInformation;
+export const selectTravelTimeInformation = (state: RootState) =>
+  state.rideFlow.travelTimeInformation;

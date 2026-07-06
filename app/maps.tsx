@@ -3,7 +3,6 @@ import NavigateCard from "@/components/NavigateCard";
 import React, { useMemo, useRef } from "react";
 import { TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { goBackRideState, rideState } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";

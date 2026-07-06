@@ -11,7 +11,6 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  FlatList,
   Keyboard,
   Text,
   TextInput,
@@ -20,10 +19,6 @@ import {
   View,
 } from "react-native";
 import tw from "twrnc";
-import RecentVisitedPlaces from "./RecentVisitedPlaces";
-import Navoptions from "./Navoptions";
-import PromoCarousel from "./PromoCarousel";
-import MiniMapPreview from "./MiniMapPreview";
 
 export default function SearchBar() {
   const [rideDestination, setRideDestination] = useState("");
@@ -67,6 +62,13 @@ export default function SearchBar() {
   };
   const handleClear = () => {
     setRideDestination("");
+    dispatch(
+      setOrigin({
+        description: "",
+        latitude: 0,
+        longitude: 0,
+      }),
+    );
     setResults([]);
   };
 
