@@ -22,8 +22,6 @@ type RideFlowState = {
   driverArrived: boolean;
   tripEndedAt: string | null;
   price: number;
-  lastDestination: LatLng | null;
-  lastDestinationDescription: string;
 };
 
 const initialState: RideFlowState = {
@@ -39,8 +37,6 @@ const initialState: RideFlowState = {
   rideStatus: "idle",
   tripEndedAt: null,
   price: 0,
-  lastDestination: null,
-  lastDestinationDescription: "",
 };
 
 const RideFlowSlice = createSlice({
@@ -83,8 +79,6 @@ const RideFlowSlice = createSlice({
     endTrip: (state) => {
       state.rideStatus = "trip_ended";
       state.tripEndedAt = new Date().toISOString();
-      state.lastDestination = state.destination;
-      state.lastDestinationDescription = state.destinationDescription;
     },
     startOver: (state) => {
       state.rideStatus = "idle";
@@ -149,10 +143,6 @@ export const selectDestination = (state: RootState) =>
   state.rideFlow.destination;
 export const selectDestinationDescription = (state: RootState) =>
   state.rideFlow.destinationDescription;
-export const selectLastDestinationDescription = (state: RootState) =>
-  state.rideFlow.lastDestinationDescription;
-export const selectLastDestination = (state: RootState) =>
-  state.rideFlow.lastDestination;
 
 export const rideState = (state: RootState) => state.rideFlow.rideStatus;
 export const selectedRideId = (state: RootState) => state.rideFlow.rideId;

@@ -76,7 +76,16 @@ export type AppColors = {
 };
 
 export type RecentPlace = {
+  id?:string,
   user_id: string;
+  title: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+};
+export type FavoritePlace = {
+  id?:string,
+  user_id?: string;
   title: string;
   address: string;
   latitude: number;

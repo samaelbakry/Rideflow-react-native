@@ -2,11 +2,8 @@ import { createThemeStyles } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { addFavoritePlace, getFavoritePlaces } from "@/services/favoritePlaces";
 import { selectUser } from "@/store/slices/authSlice";
-import {
-  selectLastDestination,
-  selectLastDestinationDescription,
-} from "@/store/slices/rideFlowSlice";
 import { useAppSelector } from "@/store/store";
+import { FavoritePlace, RecentPlace } from "@/types/PropsTypes";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import {
@@ -23,22 +20,21 @@ import {
 import { FlatList } from "react-native-gesture-handler";
 import tw from "twrnc";
 import FavoritePlaceCard from "./FavoritePlaceCard";
+import { getRecentPlace } from "@/services/recentRides";
 
 export default function FavoritePlaces() {
-  const [open, setOpen] = useState(false);
   const colors = useThemeColors();
   const theme = createThemeStyles(colors);
   const [title, setTitle] = useState("");
-  const [places, setPlaces] = useState([]);
-  const lastDestination = useAppSelector(selectLastDestination);
-  const lastDestinationDescription = useAppSelector(
-    selectLastDestinationDescription,
-  );
+  const [favoritePlaces, setFavoritePlaces] = useState<FavoritePlace[]>([]);
+  const [recentPlaces, setRecentPlaces] = useState<RecentPlace[]>([]);
+  const [selectedPlace, setSelectedPlace] = useState<FavoritePlace | null>(null);
+  const [open, setOpen] = useState(false);
 
   const userId = useAppSelector(selectUser)?.id;
 
   const handleSave = async () => {
-    if (!lastDestination || !lastDestinationDescription) {
+    if (!selectedPlace) {
       Alert.alert("Select a destination first.");
       return;
     }
@@ -51,9 +47,9 @@ export default function FavoritePlaces() {
       await addFavoritePlace({
         user_id: userId!,
         title,
-        address: lastDestinationDescription,
-        latitude: lastDestination.latitude,
-        longitude: lastDestination.longitude,
+        address: selectedPlace.address,
+        latitude: selectedPlace.latitude,
+        longitude: selectedPlace.longitude,
       });
 
       await fetchPlaces();
@@ -70,14 +66,26 @@ export default function FavoritePlaces() {
     if (!userId) return;
     try {
       const data = await getFavoritePlaces(userId);
-      setPlaces(data ?? []);
+      setFavoritePlaces(data ?? []);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function fetchRecentPlaces() {
+    if (!userId) return;
+
+    try {
+      const data = await getRecentPlace(userId);
+      setRecentPlaces(data ?? []);
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
+    if (!userId) return;
     fetchPlaces();
+    fetchRecentPlaces();
   }, []);
 
   return (
@@ -130,21 +138,41 @@ export default function FavoritePlaces() {
 
               <TextInput
                 placeholder="Home, Work..."
+                placeholderTextColor="gray"
                 value={title}
                 onChangeText={setTitle}
                 style={tw`border border-gray-300 rounded-xl p-4 text-base`}
               />
 
-              <View style={tw`mt-5 bg-gray-100 rounded-xl p-4`}>
-                <Text style={tw`text-xs text-gray-500 mb-1`}>
-                  Selected Address
-                </Text>
+              <Text style={tw`mt-5 mb-2 font-semibold`}>
+                Choose a recent place
+              </Text>
 
-                <Text style={tw`font-medium`}>
-                  {lastDestinationDescription || "No destination selected"}
-                </Text>
-              </View>
+              <FlatList
+                data={recentPlaces}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => setSelectedPlace(item)}
+                    style={[
+                      tw`p-3 rounded-xl mb-2`,
+                      selectedPlace?.id === item.id
+                        ? tw`bg-orange-100`
+                        : tw`bg-gray-100`,
+                    ]}
+                  >
+                    <Text style={tw`font-semibold`}>{item.title}</Text>
 
+                    <Text numberOfLines={1} style={tw`text-xs text-gray-500`}>
+                      {item.address}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                ListEmptyComponent={
+                  <Text style={tw`text-center text-gray-400`}>
+                    No recent places
+                  </Text>
+                }
+              />
               <TouchableOpacity
                 onPress={handleSave}
                 style={tw`bg-black rounded-2xl py-4 mt-6 items-center`}
@@ -167,8 +195,7 @@ export default function FavoritePlaces() {
 
         <FlatList
           horizontal
-          data={places}
-          keyExtractor={(index) => index}
+          data={favoritePlaces}
           renderItem={({ item }) => <FavoritePlaceCard item={item} />}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={tw`pt-3 pr-4`}
