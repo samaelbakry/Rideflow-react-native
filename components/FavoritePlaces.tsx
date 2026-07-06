@@ -1,6 +1,6 @@
 import { createThemeStyles } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme-colors";
-import { addFavoritePlace } from "@/services/favoritePlaces";
+import { addFavoritePlace, getFavoritePlaces } from "@/services/favoritePlaces";
 import { selectUser } from "@/store/slices/authSlice";
 import {
   selectLastDestination,
@@ -8,7 +8,7 @@ import {
 } from "@/store/slices/rideFlowSlice";
 import { useAppSelector } from "@/store/store";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -20,20 +20,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import tw from "twrnc";
+import FavoritePlaceCard from "./FavoritePlaceCard";
 
 export default function FavoritePlaces() {
   const [open, setOpen] = useState(false);
   const colors = useThemeColors();
   const theme = createThemeStyles(colors);
   const [title, setTitle] = useState("");
+  const [places, setPlaces] = useState([]);
   const lastDestination = useAppSelector(selectLastDestination);
-  const lastDestinationDescription = useAppSelector(selectLastDestinationDescription);
+  const lastDestinationDescription = useAppSelector(
+    selectLastDestinationDescription,
+  );
 
   const userId = useAppSelector(selectUser)?.id;
 
   const handleSave = async () => {
-
     if (!lastDestination || !lastDestinationDescription) {
       Alert.alert("Select a destination first.");
       return;
@@ -52,6 +56,8 @@ export default function FavoritePlaces() {
         longitude: lastDestination.longitude,
       });
 
+      await fetchPlaces();
+
       Alert.alert("Success", "favorite place saved");
       setTitle("");
       setOpen(false);
@@ -59,6 +65,20 @@ export default function FavoritePlaces() {
       Alert.alert("Error", error);
     }
   };
+
+  async function fetchPlaces() {
+    if (!userId) return;
+    try {
+      const data = await getFavoritePlaces(userId);
+      setPlaces(data ?? []);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchPlaces();
+  }, []);
 
   return (
     <View style={tw`mt-5`}>
@@ -135,6 +155,28 @@ export default function FavoritePlaces() {
           </Pressable>
         </Pressable>
       </Modal>
+      <View style={tw`mt-5`}>
+        <Text
+          style={[
+            tw`text-gray-400 font-bold px-2 mt-2 uppercase text-xs tracking-wider`,
+            theme.text,
+          ]}
+        >
+          Your Favorite Places
+        </Text>
+
+        <FlatList
+          horizontal
+          data={places}
+          keyExtractor={(index) => index}
+          renderItem={({ item }) => <FavoritePlaceCard item={item} />}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={tw`pt-3 pr-4`}
+          ListEmptyComponent={
+            <Text style={tw`text-gray-400 px-2`}>No favorite places yet.</Text>
+          }
+        />
+      </View>
     </View>
   );
 }

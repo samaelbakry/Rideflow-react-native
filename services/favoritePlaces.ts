@@ -24,14 +24,19 @@ export async function addFavoritePlace({
   });
   if(error) throw error
 } 
-export async function getFavoritePlace({user_id}: { user_id: string;}) {
-  const { data , error } = await supabase
-  .from("favorite_places")
-  .select("*")
-  .eq("user_id" , user_id);
-  if(error) throw error
-  return data
-} 
+
+export async function getFavoritePlaces(userId: string) {
+  const { data, error } = await supabase
+    .from("favorite_places")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data;
+}
+
 export async function deleteFavoritePlace(id: string) {
   const { error } = await supabase
     .from("favorite_places")
