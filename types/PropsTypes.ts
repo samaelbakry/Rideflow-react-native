@@ -76,7 +76,7 @@ export type AppColors = {
 };
 
 export type RecentPlace = {
-  id?:string,
+  id:string,
   user_id: string;
   title: string;
   address: string;
@@ -98,4 +98,20 @@ export type Promo = {
   subtitle: string;
   button_text: string;
   background_color: string;
+};
+export type FavoritePlaceModalProps = {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+
+  recentPlaces: RecentPlace[];
+
+  selectedPlace: FavoritePlace | null;
+  setSelectedPlace: React.Dispatch<
+    React.SetStateAction<FavoritePlace | null>
+  >;
+
+  handleSave: () => void;
 };
