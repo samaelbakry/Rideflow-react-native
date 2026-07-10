@@ -1,4 +1,5 @@
 import { createThemeStyles } from "@/constants/theme";
+import { useNetworkStatus } from "@/hooks/use-network-status";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { getSearchvalue } from "@/services/searchAutocomplete-service";
 import {
@@ -11,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Keyboard,
   Text,
   TextInput,
@@ -27,6 +29,7 @@ export default function SearchBar() {
 
   const colors = useThemeColors();
   const theme = createThemeStyles(colors);
+  const isConnected = useNetworkStatus();
 
   const dispatch = useAppDispatch();
   const origin = useAppSelector(selectOrigin);
@@ -50,6 +53,10 @@ export default function SearchBar() {
   }, [rideDestination]);
 
   const handleSearch = async (query: string) => {
+    if (!isConnected) {
+      Alert.alert("No Internet", "Please check your connection.");
+      return;
+    }
     try {
       setLoading(true);
       const data = await getSearchvalue({ query });
@@ -61,6 +68,10 @@ export default function SearchBar() {
     }
   };
   const handleClear = () => {
+    if (!isConnected) {
+      Alert.alert("No Internet", "Please check your connection.");
+      return;
+    }
     setRideDestination("");
     dispatch(
       setOrigin({

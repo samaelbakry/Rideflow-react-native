@@ -26,6 +26,7 @@ import { setUser } from "@/store/slices/authSlice";
 import { useAppDispatch } from "@/store/store";
 import { createThemeStyles } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme-colors";
+import { useNetworkStatus } from "@/hooks/use-network-status";
 
 type FieldNames = "fullName" | "email" | "password" | "confirmPassword";
 
@@ -36,6 +37,8 @@ export default function Register() {
 
   const colors = useThemeColors();
   const theme = createThemeStyles(colors);
+  const isConnected = useNetworkStatus();
+
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -56,6 +59,10 @@ export default function Register() {
 
   const onSubmit = async (values: RegisterSchemaType) => {
     try {
+      if (!isConnected) {
+        Alert.alert("No Internet", "Please check your connection.");
+        return;
+      }
       const user = await register(values);
       dispatch(setUser(user));
       router.replace("/");
@@ -121,8 +128,8 @@ export default function Register() {
                       errors.fullName
                         ? { borderColor: colors.danger }
                         : focusedInput === "fullName"
-                        ? { borderColor: colors.primary }
-                        : null,
+                          ? { borderColor: colors.primary }
+                          : null,
                     ]}
                   >
                     <Ionicons
@@ -132,8 +139,8 @@ export default function Register() {
                         errors.fullName
                           ? colors.danger
                           : focusedInput === "fullName"
-                          ? colors.primary
-                          : colors.icon
+                            ? colors.primary
+                            : colors.icon
                       }
                     />
                     <TextInput
@@ -148,7 +155,9 @@ export default function Register() {
                     />
                   </View>
                   {errors.fullName && (
-                    <Text style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}>
+                    <Text
+                      style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}
+                    >
                       {errors.fullName.message}
                     </Text>
                   )}
@@ -168,8 +177,8 @@ export default function Register() {
                       errors.email
                         ? { borderColor: colors.danger }
                         : focusedInput === "email"
-                        ? { borderColor: colors.primary }
-                        : null,
+                          ? { borderColor: colors.primary }
+                          : null,
                     ]}
                   >
                     <Ionicons
@@ -179,8 +188,8 @@ export default function Register() {
                         errors.email
                           ? colors.danger
                           : focusedInput === "email"
-                          ? colors.primary
-                          : colors.icon
+                            ? colors.primary
+                            : colors.icon
                       }
                     />
                     <TextInput
@@ -197,7 +206,9 @@ export default function Register() {
                     />
                   </View>
                   {errors.email && (
-                    <Text style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}>
+                    <Text
+                      style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}
+                    >
                       {errors.email.message}
                     </Text>
                   )}
@@ -217,8 +228,8 @@ export default function Register() {
                       errors.password
                         ? { borderColor: colors.danger }
                         : focusedInput === "password"
-                        ? { borderColor: colors.primary }
-                        : null,
+                          ? { borderColor: colors.primary }
+                          : null,
                     ]}
                   >
                     <Ionicons
@@ -228,8 +239,8 @@ export default function Register() {
                         errors.password
                           ? colors.danger
                           : focusedInput === "password"
-                          ? colors.primary
-                          : colors.icon
+                            ? colors.primary
+                            : colors.icon
                       }
                     />
                     <TextInput
@@ -256,7 +267,9 @@ export default function Register() {
                     </TouchableOpacity>
                   </View>
                   {errors.password && (
-                    <Text style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}>
+                    <Text
+                      style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}
+                    >
                       {errors.password.message}
                     </Text>
                   )}
@@ -276,8 +289,8 @@ export default function Register() {
                       errors.confirmPassword
                         ? { borderColor: colors.danger }
                         : focusedInput === "confirmPassword"
-                        ? { borderColor: colors.primary }
-                        : null,
+                          ? { borderColor: colors.primary }
+                          : null,
                     ]}
                   >
                     <Ionicons
@@ -287,8 +300,8 @@ export default function Register() {
                         errors.confirmPassword
                           ? colors.danger
                           : focusedInput === "confirmPassword"
-                          ? colors.primary
-                          : colors.icon
+                            ? colors.primary
+                            : colors.icon
                       }
                     />
                     <TextInput
@@ -308,14 +321,20 @@ export default function Register() {
                       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     >
                       <Ionicons
-                        name={showConfirmPassword ? "eye-off-outline" : "eye-outline"}
+                        name={
+                          showConfirmPassword
+                            ? "eye-off-outline"
+                            : "eye-outline"
+                        }
                         size={22}
                         color={colors.icon}
                       />
                     </TouchableOpacity>
                   </View>
                   {errors.confirmPassword && (
-                    <Text style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}>
+                    <Text
+                      style={[tw`text-xs mt-2 ml-1`, { color: colors.danger }]}
+                    >
                       {errors.confirmPassword.message}
                     </Text>
                   )}
@@ -331,7 +350,7 @@ export default function Register() {
                 tw`rounded-2xl h-14 items-center justify-center mb-8 shadow-md`,
                 isSubmitting
                   ? { backgroundColor: colors.textMuted }
-                  : theme.card, 
+                  : theme.card,
               ]}
             >
               {isSubmitting ? (
@@ -347,7 +366,9 @@ export default function Register() {
               <Text style={theme.secondaryText}>Already have an account?</Text>
               <Link href="/(auth)/login" asChild>
                 <TouchableOpacity>
-                  <Text style={[tw`font-semibold ml-2`, { color: colors.primary }]}>
+                  <Text
+                    style={[tw`font-semibold ml-2`, { color: colors.primary }]}
+                  >
                     Sign In
                   </Text>
                 </TouchableOpacity>

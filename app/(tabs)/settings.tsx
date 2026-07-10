@@ -1,6 +1,7 @@
 import Appearance from "@/components/Appearance";
 import Container from "@/components/common/Container";
 import { createThemeStyles } from "@/constants/theme";
+import { useNetworkStatus } from "@/hooks/use-network-status";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { signOut } from "@/services/auth";
 import { logout } from "@/store/slices/authSlice";
@@ -15,12 +16,17 @@ export default function Settings() {
   const user = useAppSelector((state) => state.auth.user);
   const initial = user?.name?.charAt(0)?.toUpperCase() ?? "U";
   const dispatch = useAppDispatch();
+  const isConnected = useNetworkStatus();
 
   const colors = useThemeColors();
   const theme = createThemeStyles(colors);
-  const navigate = useRouter()
+  const navigate = useRouter();
 
   const handleLogout = async () => {
+    if (!isConnected) {
+      Alert.alert("No Internet", "Please check your connection.");
+      return;
+    }
     Alert.alert("Logout", "Are you sure you want to sign out?", [
       { text: "Cancel", style: "cancel" },
       {
@@ -82,10 +88,7 @@ export default function Settings() {
               />
             ) : (
               <Text
-                style={[
-                  tw`text-xl font-bold`,
-                  { color: colors.onPrimary },
-                ]}
+                style={[tw`text-xl font-bold`, { color: colors.onPrimary }]}
               >
                 {initial}
               </Text>
@@ -104,17 +107,9 @@ export default function Settings() {
         </View>
 
         <View
-          style={[
-            tw`p-1.5 rounded-xl border`,
-            theme.surface,
-            theme.border,
-          ]}
+          style={[tw`p-1.5 rounded-xl border`, theme.surface, theme.border]}
         >
-          <Ionicons
-            name="chevron-forward"
-            size={16}
-            color={colors.icon}
-          />
+          <Ionicons name="chevron-forward" size={16} color={colors.icon} />
         </View>
       </TouchableOpacity>
 
@@ -143,11 +138,7 @@ export default function Settings() {
                 { backgroundColor: colors.primary },
               ]}
             >
-              <Ionicons
-                name="cog"
-                color={colors.onPrimary}
-                size={24}
-              />
+              <Ionicons name="cog" color={colors.onPrimary} size={24} />
             </View>
 
             <View style={tw`ml-4 flex-1`}>
@@ -158,17 +149,9 @@ export default function Settings() {
           </View>
 
           <View
-            style={[
-              tw`p-1.5 rounded-xl border`,
-              theme.surface,
-              theme.border,
-            ]}
+            style={[tw`p-1.5 rounded-xl border`, theme.surface, theme.border]}
           >
-            <Ionicons
-              name="chevron-forward"
-              size={16}
-              color={colors.icon}
-            />
+            <Ionicons name="chevron-forward" size={16} color={colors.icon} />
           </View>
         </TouchableOpacity>
       </View>
@@ -182,12 +165,7 @@ export default function Settings() {
         Preferences
       </Text>
 
-      <View
-        style={[
-          tw`rounded-3xl p-4 border shadow-sm mb-6`,
-          theme.card,
-        ]}
-      >
+      <View style={[tw`rounded-3xl p-4 border shadow-sm mb-6`, theme.card]}>
         <Appearance />
       </View>
 
@@ -198,17 +176,10 @@ export default function Settings() {
         activeOpacity={0.8}
         style={tw`bg-red-50 border border-red-100 rounded-2xl h-14 flex-row items-center justify-center mb-6`}
       >
-        <Ionicons
-          name="log-out-outline"
-          color={colors.danger}
-          size={20}
-        />
+        <Ionicons name="log-out-outline" color={colors.danger} size={20} />
 
         <Text
-          style={[
-            tw`font-semibold ml-2 text-base`,
-            { color: colors.danger },
-          ]}
+          style={[tw`font-semibold ml-2 text-base`, { color: colors.danger }]}
         >
           Log Out
         </Text>

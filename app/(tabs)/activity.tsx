@@ -1,17 +1,19 @@
 import ClearActivityButton from "@/components/ClearActivityButton";
 import RideActivityItem from "@/components/RideActivityItem";
 import { createThemeStyles } from "@/constants/theme";
+import { useNetworkStatus } from "@/hooks/use-network-status";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { supabase } from "@/lib/supabase";
 import { getUserRides } from "@/services/rideData";
 import { CreateRideProps } from "@/types/PropsTypes";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Text, View } from "react-native";
 import tw from "twrnc";
 
 export default function Activity() {
   const [rides, setRides] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const isConnected = useNetworkStatus();
 
   const colors = useThemeColors();
   const theme = createThemeStyles(colors);
@@ -34,6 +36,10 @@ export default function Activity() {
 
   async function loadRides() {
     try {
+      if (!isConnected) {
+        Alert.alert("No Internet", "Please check your connection.");
+        return;
+      }
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -51,12 +57,7 @@ export default function Activity() {
 
   if (loading) {
     return (
-      <View
-        style={[
-          tw`flex-1 justify-center items-center`,
-          styles.container,
-        ]}
-      >
+      <View style={[tw`flex-1 justify-center items-center`, styles.container]}>
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
@@ -69,9 +70,7 @@ export default function Activity() {
           Rides History
         </Text>
 
-        {rides.length > 0 && (
-          <ClearActivityButton setRides={setRides} />
-        )}
+        {rides.length > 0 && <ClearActivityButton setRides={setRides} />}
       </View>
 
       <FlatList

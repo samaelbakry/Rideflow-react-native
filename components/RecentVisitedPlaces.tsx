@@ -11,10 +11,12 @@ import tw from "twrnc";
 import { Ionicons } from "@expo/vector-icons";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { createThemeStyles } from "@/constants/theme";
+import { useNetworkStatus } from "@/hooks/use-network-status";
 
 export default function RecentVisitedPlaces() {
   const userId = useSelector(selectUser)?.id;
   const [places, setPlaces] = useState<RecentPlace[]>([]);
+  const isConnected = useNetworkStatus();
 
   const colors = useThemeColors();
   const theme = createThemeStyles(colors);
@@ -31,8 +33,12 @@ export default function RecentVisitedPlaces() {
   }
 
   async function handleClear() {
+    if (!isConnected) {
+      Alert.alert("No Internet", "Please check your connection.");
+      return;
+    }
     if (!userId) return;
-    
+
     Alert.alert("clear", "Are you sure you want to clear history?", [
       { text: "Cancel", style: "cancel" },
       {
@@ -53,15 +59,27 @@ export default function RecentVisitedPlaces() {
   return (
     <View style={tw`mt-6`}>
       <View style={tw`flex-row justify-between items-center`}>
-        <Text style={[tw`text-gray-400 font-bold mb-3 px-2 uppercase text-xs tracking-wider`, theme.text]}>
+        <Text
+          style={[
+            tw`text-gray-400 font-bold mb-3 px-2 uppercase text-xs tracking-wider`,
+            theme.text,
+          ]}
+        >
           Recent Places
         </Text>
         {places.length > 1 && (
-          <View style={[tw`rounded-2xl shadow p-2 mb-3 text-xs tracking-wider`, theme.card]}>
-
-              <TouchableOpacity style={tw`${colors.primary}`}  onPress={handleClear}>
-                <Text style={tw`text-xs tracking-wider`}>Clear</Text>
-              </TouchableOpacity>
+          <View
+            style={[
+              tw`rounded-2xl shadow p-2 mb-3 text-xs tracking-wider`,
+              theme.card,
+            ]}
+          >
+            <TouchableOpacity
+              style={tw`${colors.primary}`}
+              onPress={handleClear}
+            >
+              <Text style={[tw`text-xs tracking-wider font-bold` , theme.caption]}>Clear</Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>
@@ -79,9 +97,9 @@ export default function RecentVisitedPlaces() {
           </Text>
         </View>
       ) : (
-        places.map((item , index) => (
+        places.map((item, index) => (
           <TouchableOpacity
-            key={index} 
+            key={index}
             style={[
               tw`flex-row items-center py-3 rounded-xl px-2 mb-3 shadow-md`,
               theme.card,

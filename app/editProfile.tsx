@@ -19,9 +19,11 @@ import {
 import { selectUser, setUser } from "@/store/slices/authSlice";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 import { createThemeStyles } from "@/constants/theme";
+import { useNetworkStatus } from "@/hooks/use-network-status";
 
 export default function EditProfile() {
   const user = useAppSelector(selectUser);
+  const isConnected = useNetworkStatus();
 
   const [name, setName] = useState(user?.name ?? "");
   const [image, setImage] = useState<string | null>(null);
@@ -55,7 +57,13 @@ export default function EditProfile() {
   };
 
   async function handleSave() {
-    const { data: { user: authUser } } = await supabase.auth.getUser();
+    if (!isConnected) {
+      Alert.alert("No Internet", "Please check your connection.");
+      return;
+    }
+    const {
+      data: { user: authUser },
+    } = await supabase.auth.getUser();
 
     if (!user || !authUser) return;
 
@@ -73,7 +81,7 @@ export default function EditProfile() {
           ...user,
           name,
           avatar_url: avatarImage,
-        })
+        }),
       );
 
       Alert.alert("Success", "Profile updated successfully");
@@ -103,10 +111,7 @@ export default function EditProfile() {
               ]}
             >
               <Text
-                style={[
-                  tw`text-5xl font-bold`,
-                  { color: colors.onPrimary },
-                ]}
+                style={[tw`text-5xl font-bold`, { color: colors.onPrimary }]}
               >
                 {initial}
               </Text>
@@ -120,47 +125,31 @@ export default function EditProfile() {
               { backgroundColor: colors.primary },
             ]}
           >
-            <Ionicons
-              name="camera"
-              size={18}
-              color={colors.onPrimary}
-            />
+            <Ionicons name="camera" size={18} color={colors.onPrimary} />
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity onPress={pickImage} style={tw`mt-4`}>
-          <Text
-            style={[
-              tw`font-semibold`,
-              { color: colors.primary },
-            ]}
-          >
+          <Text style={[tw`font-semibold`, { color: colors.primary }]}>
             Change Photo
           </Text>
         </TouchableOpacity>
       </View>
 
       <View style={tw`mb-6`}>
-        <Text style={[tw`mb-2`, theme.secondaryText]}>
-          Full Name
-        </Text>
+        <Text style={[tw`mb-2`, theme.secondaryText]}>Full Name</Text>
 
         <TextInput
           value={name}
           onChangeText={setName}
           placeholder="Enter your name"
           placeholderTextColor={colors.textMuted}
-          style={[
-            tw`border rounded-2xl px-4 py-4 text-base`,
-            theme.input,
-          ]}
+          style={[tw`border rounded-2xl px-4 py-4 text-base`, theme.input]}
         />
       </View>
 
       <View style={tw`mb-8`}>
-        <Text style={[tw`mb-2`, theme.secondaryText]}>
-          Email
-        </Text>
+        <Text style={[tw`mb-2`, theme.secondaryText]}>Email</Text>
 
         <TextInput
           value={user?.email}
@@ -176,12 +165,7 @@ export default function EditProfile() {
           ]}
         />
 
-        <Text
-          style={[
-            tw`text-xs mt-2`,
-            theme.mutedText,
-          ]}
-        >
+        <Text style={[tw`text-xs mt-2`, theme.mutedText]}>
           Email cannot be changed.
         </Text>
       </View>
@@ -194,12 +178,7 @@ export default function EditProfile() {
           { backgroundColor: colors.primary },
         ]}
       >
-        <Text
-          style={[
-            tw`font-bold text-lg`,
-            { color: colors.onPrimary },
-          ]}
-        >
+        <Text style={[tw`font-bold text-lg`, { color: colors.onPrimary }]}>
           Save Changes
         </Text>
       </TouchableOpacity>
