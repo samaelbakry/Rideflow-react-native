@@ -155,8 +155,8 @@ export default function FavoritePlaces() {
           <View style={[theme.card, tw`rounded-2xl shadow-md p-4 mb-2`]}>
             <Text
               style={[
-                tw`font-bold uppercase text-xs tracking-wider mb-3`,
-                theme.heading,
+                tw`uppercase text-xs tracking-wider mb-3`,
+                theme.heading
               ]}
             >
               Your Favorite Places

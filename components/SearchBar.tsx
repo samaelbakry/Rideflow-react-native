@@ -74,11 +74,7 @@ export default function SearchBar() {
     }
     setRideDestination("");
     dispatch(
-      setOrigin({
-        description: "",
-        latitude: 0,
-        longitude: 0,
-      }),
+      setOrigin(null),
     );
     setResults([]);
   };

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { LatLng } from "@/types/PropsTypes";
 type RideStatus =
@@ -46,9 +46,9 @@ const RideFlowSlice = createSlice({
     setRideId: (state, action) => {
       state.rideId = action.payload;
     },
-    setOrigin: (state, action) => {
+    setOrigin: (state, action:PayloadAction<LatLng | null>) => {
       state.origin = action.payload;
-      state.originDescription = action.payload.description;
+      state.originDescription = action.payload?.description ?? "";
     },
     setDestination: (state, action) => {
       state.destination = action.payload;

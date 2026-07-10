@@ -7,9 +7,9 @@ export type ContainerProps = {
 }
 
 export type LatLng = {
+  description?: string;
   latitude: number;
   longitude: number;
-  description?: string;
 };
 
 export type CreateRideProps = {
@@ -76,7 +76,7 @@ export type AppColors = {
 };
 
 export type RecentPlace = {
-  id:string,
+  id?:string,
   user_id: string;
   title: string;
   address: string;

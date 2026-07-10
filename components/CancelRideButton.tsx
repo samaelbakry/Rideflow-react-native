@@ -1,22 +1,31 @@
-import { updateRideStatus } from "@/services/rideData";
-import { selectedRideId, startOver } from "@/store/slices/rideFlowSlice";
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { startOver } from "@/store/slices/rideFlowSlice";
+import { useAppDispatch } from "@/store/store";
 import { useRouter } from "expo-router";
 import React from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Alert, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 
 export default function CancelRideButton() {
   const dispatch = useAppDispatch();
-  const navigate = useRouter();
-  const rideId = useAppSelector(selectedRideId)
+  const router = useRouter();
 
-  const handleClick = async() => {
-    dispatch(startOver());
-    await updateRideStatus(rideId!,"trip_ended")
-    navigate.back();
+  const handleClick = async () => {
+    Alert.alert("Cancel Ride", "Are you sure you want cancel your ride ?", [
+      { text: "cancle", style: "cancel" },
+      {
+        text: "Sure",
+        style: "destructive",
+        onPress: () => {
+          try {
+            dispatch(startOver());
+            router.replace("/");
+          } catch (error) {
+            console.error("Failed to cancel ride:", error);
+          }
+        },
+      },
+    ]);
   };
-
   return (
     <>
       <TouchableOpacity

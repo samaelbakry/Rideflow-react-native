@@ -1,14 +1,15 @@
 import MapContent from "@/components/MapContent";
 import NavigateCard from "@/components/NavigateCard";
+import { createThemeStyles } from "@/constants/theme";
+import { useThemeColors } from "@/hooks/use-theme-colors";
+import { goBackRideState, rideState, selectDestination, setOrigin } from "@/store/slices/rideFlowSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { Ionicons } from "@expo/vector-icons";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import { useRouter } from "expo-router";
 import React, { useMemo, useRef } from "react";
 import { TouchableOpacity, View } from "react-native";
 import tw from "twrnc";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { goBackRideState, rideState } from "@/store/slices/rideFlowSlice";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import { Ionicons } from "@expo/vector-icons";
-import { useThemeColors } from "@/hooks/use-theme-colors";
-import { createThemeStyles } from "@/constants/theme";
 
 export default function Maps() {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -17,9 +18,20 @@ export default function Maps() {
 
   const rideStatus = useAppSelector(rideState);
   const dispatch = useAppDispatch();
+  const router = useRouter()
 
   const colors = useThemeColors();
   const theme = createThemeStyles(colors);
+
+  const destination = useAppSelector(selectDestination)
+
+  const goBack = ()=>{
+    dispatch(
+      setOrigin(null),
+    )
+    
+    router.replace("/")
+  }
 
   return (
     <View style={tw`flex-1`}>
@@ -52,7 +64,15 @@ export default function Maps() {
               <Ionicons name="arrow-back" size={18} color={colors.primary} />
             </TouchableOpacity>
           )}
-          <View style={tw`mt-3`}>
+          <View style={tw`mt-3 relative`}>
+           {
+            !destination && <TouchableOpacity
+              style={tw`absolute right-4 -top-3`}
+              onPress={goBack}
+            >
+              <Ionicons name="close-circle" size={26} color={colors.icon} />
+            </TouchableOpacity>
+           }
             <NavigateCard />
           </View>
         </BottomSheetScrollView>

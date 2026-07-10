@@ -122,6 +122,7 @@ export default function MapContent() {
         if (rideStatus === "driver_assigned") {
           dispatch(setDriverPosition(true));
           setCarPosition(origin);
+          setRouteCoords([])
         }
 
         if (rideStatus === "trip_started") {

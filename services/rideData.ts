@@ -28,13 +28,8 @@ export async function createRide(ride: CreateRideProps) {
   return data;
 }
 
-export async function updateRideStatus(
-  rideId: string,
-  status: string,
-) {
-  const updates: any = {
-    status,
-  };
+export async function updateRideStatus( rideId: string, status: string) {
+  const updates: any = { status };
 
   if (status === "trip_ended") {
     updates.finished_at = new Date().toISOString();
@@ -55,7 +50,7 @@ export async function updateRideStatus(
 export async function getUserRides(userId: string) {
  const { data , error } = await supabase
   .from("rides")
-.select(`
+  .select(`
     *,
     drivers!rides_driver_id_fkey(
       name,

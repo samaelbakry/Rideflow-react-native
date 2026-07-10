@@ -17,7 +17,9 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Car, Driver } from "@/types/rideTypes";
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import * as Animatable from "react-native-animatable";
 import tw from "twrnc";
+import { SearchingForDriver } from "./SearchingForDriver";
 
 export default function DriverList() {
   const dispatch = useAppDispatch();
@@ -27,7 +29,8 @@ export default function DriverList() {
 
   const [cars, setCars] = useState<Car[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
-
+  const [isSearching, setIsSearching] = useState(true);
+  
   const selectedCarType = useAppSelector(selectedCar);
 
   const origin = useAppSelector(selectOrigin);
@@ -40,6 +43,7 @@ export default function DriverList() {
   const price = useAppSelector(selectPrice);
 
   useEffect(() => {
+    let timeout : ReturnType<typeof setTimeout>
     async function loadData() {
       try {
         const [carsData, driversData] = await Promise.all([
@@ -49,12 +53,19 @@ export default function DriverList() {
 
         setCars(carsData);
         setDrivers(driversData);
+
+        timeout = setTimeout(() => {
+          setIsSearching(false)
+        }, 2500);
+
       } catch (error) {
         console.log(error);
       }
     }
 
     loadData();
+
+    return ()=> {clearTimeout(timeout)}
   }, []);
 
   const driversData = drivers.filter(
@@ -63,21 +74,32 @@ export default function DriverList() {
       driver.ride_type,
   );
 
+  if (isSearching) {
+  return (
+    <SearchingForDriver/>
+  );
+}
+
   return (
     <View style={tw`p-4`}>
-      {driversData.map((item) => (
+      {driversData.map((item , index) => (
+      <Animatable.View
+        animation="fadeInUp"
+        delay={ index * 250}
+        duration={600}
+        key={item.id}
+        >
         <TouchableOpacity
-          key={item.id}
           onPress={async () => {
             if (!item.is_available) return;
-
+            
             try {
               const {
                 data: { user },
               } = await supabase.auth.getUser();
-
+              
               if (!user) return;
-
+              
               const ride = await createRide({
                 user_id: user.id,
                 driver_id: item.id,
@@ -93,7 +115,7 @@ export default function DriverList() {
                 price,
                 status: "driver_assigned",
               });
-
+              
               dispatch(setRideId(ride.id));
               dispatch(setSelectedDriver(item));
             } catch (error) {
@@ -133,7 +155,7 @@ export default function DriverList() {
                     color: colors.warning,
                   },
                 ]}
-              >
+                >
                 {item.rating}
               </Text>
             </View>
@@ -168,11 +190,11 @@ export default function DriverList() {
                 tw`px-3 py-1.5 rounded-full`,
                 {
                   backgroundColor: item.is_available
-                    ? `${colors.success}20`
-                    : `${colors.danger}20`,
+                  ? `${colors.success}20`
+                  : `${colors.danger}20`,
                 },
               ]}
-            >
+              >
               <Text
                 style={[
                   tw`text-xs font-bold`,
@@ -186,7 +208,8 @@ export default function DriverList() {
             </View>
           </View>
         </TouchableOpacity>
-      ))}
+      </Animatable.View>
+         ))}
     </View>
   );
 }
