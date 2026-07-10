@@ -46,14 +46,14 @@ const RideFlowSlice = createSlice({
     setRideId: (state, action) => {
       state.rideId = action.payload;
     },
-    setOrigin: (state, action:PayloadAction<LatLng | null>) => {
+    setOrigin: (state, action: PayloadAction<LatLng | null>) => {
       state.origin = action.payload;
       state.originDescription = action.payload?.description ?? "";
     },
-    setDestination: (state, action) => {
+    setDestination: (state, action: PayloadAction<LatLng | null>) => {
       state.destination = action.payload;
-      state.destinationDescription = action.payload.description;
-      state.rideStatus = "selecting_car";
+      state.destinationDescription = action.payload?.description ?? "";
+      state.rideStatus = action.payload ? "selecting_car" : "idle";
     },
     setTravelInfo: (state, action) => {
       state.travelTimeInformation = action.payload;
