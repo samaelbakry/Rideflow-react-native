@@ -1,17 +1,20 @@
 import { getDirection, getRoute } from "@/services/getRoute";
+import { saveRecentPlace } from "@/services/recentRides";
+import { updateRideStatus } from "@/services/rideData";
+import { selectUser } from "@/store/slices/authSlice";
 import {
   endTrip,
   rideState,
   selectDestination,
+  selectDestinationDescription,
   selectedDriver,
+  selectedRideId,
   selectOrigin,
   setDriverPosition,
-  selectedRideId,
   setTravelInfo,
-  selectDestinationDescription,
 } from "@/store/slices/rideFlowSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import MapView, { LatLng } from "react-native-maps";
 import tw from "twrnc";
@@ -20,14 +23,11 @@ import DestinationMark from "./DestinationMark";
 import DestinationRoutePolyline from "./DestinationRoutePolyline";
 import StaticCars from "./StaticCars";
 import UserOriginMark from "./UserOriginMark";
-import { updateRideStatus } from "@/services/rideData";
-import { selectUser } from "@/store/slices/authSlice";
-import { saveRecentPlace } from "@/services/recentRides";
 
 export default function MapContent() {
   const origin = useAppSelector(selectOrigin);
   const destination = useAppSelector(selectDestination);
-  const destinationDescription = useAppSelector(selectDestinationDescription)
+  const destinationDescription = useAppSelector(selectDestinationDescription);
   const userId = useAppSelector(selectUser)?.id;
   const [routeCoords, setRouteCoords] = useState<LatLng[]>([]);
   const [carPosition, setCarPosition] = useState<LatLng | null>(null);
@@ -38,10 +38,8 @@ export default function MapContent() {
   const rideId = useAppSelector(selectedRideId);
   const mapRef = useRef<MapView>(null);
 
-  
-  async function handleRoute() {
+  const handleRoute = useCallback(async () => {
     if (!origin) return;
-
     if (rideStatus === "searching_drivers") {
       setRouteCoords([]);
       setCarPosition(null);
@@ -70,11 +68,11 @@ export default function MapContent() {
     }
 
     setRouteCoords([]);
-  }
+  }, [rideStatus, driver, origin, destination]);
 
   useEffect(() => {
     handleRoute();
-  }, [rideStatus, driver, origin, destination]);
+  }, [handleRoute]);
 
   useEffect(() => {
     if (!origin || !destination) return;
@@ -85,7 +83,7 @@ export default function MapContent() {
     };
 
     getTravelInfo();
-  }, [origin, destination]);
+  }, [origin, destination, dispatch]);
 
   useEffect(() => {
     if (!origin || !mapRef.current) return;
@@ -122,21 +120,21 @@ export default function MapContent() {
         if (rideStatus === "driver_assigned") {
           dispatch(setDriverPosition(true));
           setCarPosition(origin);
-          setRouteCoords([])
+          setRouteCoords([]);
         }
 
         if (rideStatus === "trip_started") {
           if (rideId) {
-           await updateRideStatus(rideId!, "trip_ended");
+            await updateRideStatus(rideId!, "trip_ended");
           }
           dispatch(endTrip());
           await saveRecentPlace({
-            user_id:userId!,
-            title:destinationDescription!,
-            address:destinationDescription!,
+            user_id: userId!,
+            title: destinationDescription!,
+            address: destinationDescription!,
             latitude: destination?.latitude!,
             longitude: destination?.longitude!,
-          })
+          });
           setCarPosition(null);
         }
 
@@ -147,7 +145,16 @@ export default function MapContent() {
     }, 200);
 
     return () => clearInterval(timer);
-  }, [routeCoords, rideStatus]);
+  }, [
+    routeCoords,
+    rideStatus,
+    destinationDescription,
+    destination,
+    rideId,
+    userId,
+    dispatch,
+    origin,
+  ]);
 
   if (!origin) return null;
 
